@@ -40,5 +40,15 @@ RUN haproxy -c -V -f /usr/local/etc/haproxy/haproxy.cfg
 
 # Revert to the haproxy user for runtime operation
 USER haproxy
+
+# Expose the container-supported network ports
+EXPOSE 80/tcp
+EXPOSE 8080/tcp
+EXPOSE 443/tcp
+EXPOSE 8443/tcp
+EXPOSE 5222/tcp
+EXPOSE 8222/tcp
+EXPOSE 8199/tcp
+
 # This is the startup command which also runs a background job to manage the WAPOX IPs
 CMD /usr/local/bin/set_public_ip_and_start.sh
