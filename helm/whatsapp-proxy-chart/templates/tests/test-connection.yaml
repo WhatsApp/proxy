@@ -1,0 +1,19 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# License found in the LICENSE file in the root directory
+# of this source tree.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "whatsapp-proxy-chart.fullname" . }}-test-connection"
+  labels:
+    {{- include "whatsapp-proxy-chart.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "whatsapp-proxy-chart.fullname" . }}:{{ .Values.service.stats_port }}']
+  restartPolicy: Never

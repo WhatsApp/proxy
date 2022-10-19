@@ -80,17 +80,10 @@ docker ps
 ```
 
 **NOTE:** Make sure to update the path to your specific `docker-compose.yml` file in the service definition `docker_boot.service`!
-## Running in Kubernetes via Helm Chart
 
-### Dependencies
+## Kubernetes deployment
 
-1. [Kubernetes](https://kubernetes.io/docs/setup/)
-2. [kubectl](https://kubernetes.io/docs/tasks/tools/) (configured to point to kubernetes cluster)
-3. [Helm charts](https://helm.sh/docs/intro/install/)
-
-### Guide
-
-TBD
+See [Helm chart README](./helm/README.md)
 
 # Architecture Overview
 
