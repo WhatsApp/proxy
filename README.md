@@ -6,6 +6,8 @@ This project aims to provide an open-proxy implementation based on [HAProxy](htt
 
 ## Setup and Installation
 
+This section outlines a basic setup and configuration for the proxy container which supports upwards of 27K connections concurrently.
+
 ### Dependencies
 
 1. [Docker](https://docs.docker.com/engine/install/)
@@ -42,9 +44,42 @@ docker run -it -p 80:80 -p 443:443 -p 5222:5222 -p 8080:8080 -p 8443:8443 -p 822
 however normally you don't want to manually run the container except for testing scenarios. Therefore we recommend utilizing Docker compose which
 is a helpful automation tool to manage setting up the container and necessary port forwards, etc without user interaction.
 
-#### Docker compose automated management
+#### Automate the container lifecycle with Docker Compose
 
+Docker compose is a tool to run multi-container deployments, but also helps automate the command-line arguments necessary to run a single container. It is a YAML definition file which denotes all of the settings to startup and run the container as well as restart strategies in the event the container crashes or self-restarts.
 
+We provide a sample [docker-compose.yml](./proxy/ops/docker-compose.yml) file for you which defines a standard deployment of the proxy container. Once docker compose is installed, you can test your specific configuration by running docker compose interactively with
+
+```bash
+docker compose -f /path/to/this/repo/docker-compose.yml up
+```
+
+which will allow you to see the output from the build + container hosting process to identify if everything is setup correctly. When you are ready to run the container as a service, do
+
+```bash
+docker compose -f /path/to/this/repo/docker-compose.yml up -d
+```
+
+Note the `-d` flag which means "daemonize" and run as a service. To stop the container you can similarly do
+
+```bash
+docker compose down
+```
+
+Once you have a docker compose setup, you can also automate the deployment for host reboots by utilizing a `systemd` service (if your hosting environment supports it). We provide a sample [`docker_boot.service`](./proxy/ops/docker_boot.service) service definition for you which you should customize to your own environment. To install and setup the `systemd` service you can do the following
+
+```bash
+# Copy the service definition to systemd folder
+cp -v docker_boot.service /etc/systemd/system/
+# Enable starting the service on startup
+systemctl enable docker_boot.service
+# Start the service (will docker compose up the container)
+systemctl start docker_boot.service
+# Check container status with
+docker ps
+```
+
+**NOTE:** Make sure to update the path to your specific `docker-compose.yml` file in the service definition `docker_boot.service`!
 ## Running in Kubernetes via Helm Chart
 
 ### Dependencies

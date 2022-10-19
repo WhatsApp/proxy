@@ -10,7 +10,6 @@ services:
     build: ../
     restart: unless-stopped
     ports:
-      - "22:22"     # SSH
       - "80:80"     # HTTP
       - "443:443"   # HTTPS
       - "5222:5222" # JABBER
@@ -24,16 +23,3 @@ services:
       start_period: 5s
     environment:
       - PUBLIC_IP=10.0.0.1
-    # sysctls:
-      # - net.core.somaxconn=1024
-      # - net.ipv4.tcp_mem="786432 1048576 1572864"
-      # - net.ipv4.tcp_rmem="4096 1048576 10485760"
-      # - net.ipv4.tcp_wmem="4096 1048576 10485760"
-      # - net.core.rmem_max=10485760
-      # - net.core.wmem_max=10485760
-      # - net.ipv4.tcp_timestamps=0
-      # - net.ipv4.tcp_max_orphans=262144
-      # - net.ipv4.tcp_max_sync_backlog=65536
-      # - net.core.netdev_max_backlog=16384
-      # - fs.file-max=10485760
-      # - net.ipv4.tcp_retries2=8
