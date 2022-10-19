@@ -1,0 +1,19 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# License found in the LICENSE file in the root directory
+# of this source tree.
+
+## Systemd definition for an example service to startup the proxy container on host reboot
+
+[Unit]
+description=docker boot
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/root/wa
+ExecStart=docker compose -f /root/whatsapp_proxy/docker-compose.yml up -d
+
+[Install]
+WantedBy=multi-user.target
