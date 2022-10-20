@@ -1,3 +1,7 @@
+<!-- Copyright (c) Meta Platforms, Inc. and affiliates.
+
+License found in the LICENSE file in the root directory
+of this source tree. -->
 # Code of Conduct
 
 ## Our Pledge

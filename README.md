@@ -1,3 +1,7 @@
+<!-- Copyright (c) Meta Platforms, Inc. and affiliates.
+
+License found in the LICENSE file in the root directory
+of this source tree. -->
 # WhatsApp Chat Proxy
 
 This project aims to provide an open-proxy implementation based on [HAProxy](https://www.haproxy.org/) which allows users to proxy their mobile apps through a central hub in the event they are unable to contact WhatsApp directly.
@@ -83,7 +87,7 @@ docker ps
 
 ## Kubernetes deployment
 
-See [Helm chart README](./helm/README.md)
+See [Helm chart README](./charts/README.md)
 
 # Architecture Overview
 
