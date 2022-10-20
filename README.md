@@ -4,10 +4,12 @@ License found in the LICENSE file in the root directory
 of this source tree. -->
 # WhatsApp Chat Proxy
 
+[<img alt="github" src="https://img.shields.io/badge/github-WhatsApp/proxy-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="20">](https://github.com/WhatsApp/proxy)
+[<img alt="build status" src="https://img.shields.io/github/workflow/status/WhatsApp/proxy/ci/main?style=for-the-badge" height="20">](https://github.com/WhatsApp/proxy/actions?query=branch%3Amain)
+
 This project aims to provide an open-proxy implementation based on [HAProxy](https://www.haproxy.org/) which allows users to proxy their mobile apps through a central hub in the event they are unable to contact WhatsApp directly.
 
 **Current Version**: 1.0
-
 ## Setup and Installation
 
 This section outlines a basic setup and configuration for the proxy container which supports upwards of 27K connections concurrently.
