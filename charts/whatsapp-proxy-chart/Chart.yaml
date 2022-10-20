@@ -6,6 +6,9 @@ apiVersion: v2
 name: whatsapp-proxy-chart
 description: A Helm chart for Kubernetes for the WhatsApp Proxy infrastructure
 icon: https://github.com/whatsapp/proxy/blob/main/helm/wa_logo.svc
+maintainers:
+  - name: Sean Lawlor
+    email: seanlawlor@meta.com
 
 # Application charts are a collection of templates that can be packaged into versioned archives
 # to be deployed.
