@@ -20,6 +20,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          # ct needs history to compare
+          fetch-depth: 0
       - name: Build the Docker image
         run: docker build ./proxy/ --tag whatsapp_proxy:$(date +%s)
 
