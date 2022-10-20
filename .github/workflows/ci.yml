@@ -19,6 +19,12 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build ./proxy/ --tag whatsapp_proxy:$(date +%s)
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker build ./proxy/ --tag whatsapp_proxy:$(date +%s)
+
+      - name: Lint Helm chart
+        uses: helm/chart-testing-action@v1.0.0
+        with:
+          command: lint
+          config: helm_lint.yaml

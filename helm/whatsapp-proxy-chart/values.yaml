@@ -10,7 +10,7 @@
 replicaCount: 10
 
 image:
-  repository: whatsapp_proxy
+  repository: seanlawlor/whatsapp_proxy
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "1.0"
@@ -45,13 +45,13 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  http_port: 80
-  https_port: 443
-  jabber_port: 5222
+  # http_port: 80
+  # https_port: 443
+  # jabber_port: 5222
   http_proxy_port: 8080
   https_proxy_port: 8443
   jabber_proxy_port: 8222
-  stats_port: 8199
+  # stats_port: 8199
 
 ingress:
   enabled: false
