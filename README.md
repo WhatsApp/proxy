@@ -87,7 +87,7 @@ docker ps
 
 ## Kubernetes deployment
 
-See [Helm chart README](./helm/README.md)
+See [Helm chart README](./charts/README.md)
 
 # Architecture Overview
 
