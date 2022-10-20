@@ -1,3 +1,4 @@
 chart-dirs:
   - helm/whatsapp-proxy-chart
 validate-maintainers: false
+target-branch: main

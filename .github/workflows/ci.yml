@@ -3,7 +3,7 @@
 # License found in the LICENSE file in the root directory
 # of this source tree.
 
-name: Docker Image CI
+name: CI
 
 on:
   push:
@@ -23,8 +23,8 @@ jobs:
       - name: Build the Docker image
         run: docker build ./proxy/ --tag whatsapp_proxy:$(date +%s)
 
-      - name: Lint Helm chart
+      - name: Lint the Helm chart (whatsapp-proxy-chart)
         uses: helm/chart-testing-action@v1.0.0
         with:
           command: lint
-          config: helm_lint.yaml
+          config: ct.yaml
