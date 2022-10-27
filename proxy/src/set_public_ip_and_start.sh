@@ -44,5 +44,12 @@ then
     sed -i "s/#PUBLIC\_IP/tcp-request connection set-dst ipv4($PUBLIC_IP)/g" $CONFIG_FILE
 fi
 
+# Setup a new, on-the-fly certificate for the HTTPS port (so this re-generates each restart)
+pushd /home/haproxy/certs
+/usr/local/bin/generate-certs.sh
+mv proxy.whatsapp.net.pem /etc/haproxy/ssl/proxy.whatsapp.net.pem
+chown haproxy:haproxy /etc/haproxy/ssl/proxy.whatsapp.net.pem
+popd
+
 # Start HAProxy
 haproxy -f "$CONFIG_FILE"

@@ -2,7 +2,7 @@
 #
 # License found in the LICENSE file in the root directory
 # of this source tree.
-FROM haproxy:2.6.6-alpine
+FROM haproxy:lts-alpine
 
 # Install dependencies for healthcheck support
 USER root
@@ -19,7 +19,7 @@ RUN chmod +x /usr/local/bin/generate-certs.sh && \
     /usr/local/bin/generate-certs.sh && \
     mkdir --parents /etc/haproxy/ssl/ && \
     mv /certs/proxy.whatsapp.net.pem /etc/haproxy/ssl/proxy.whatsapp.net.pem && \
-    chown haproxy:haproxy /etc/haproxy/ssl/proxy.whatsapp.net.pem
+    chown -R haproxy:haproxy /etc/haproxy/
 WORKDIR /
 
 # Copy the public-ip setting + sshd startup script
@@ -34,6 +34,8 @@ RUN chown haproxy:haproxy /usr/local/etc/haproxy
 COPY src/healthcheck.sh /usr/local/bin/healthcheck.sh
 RUN chmod +x /usr/local/bin/healthcheck.sh
 HEALTHCHECK --interval=10s --start-period=5s CMD bash /usr/local/bin/healthcheck.sh
+
+RUN mkdir --parents /home/haproxy/certs && chown haproxy:haproxy /home/haproxy/certs
 
 # Validate the HAProxy configuration file (sanity check)
 RUN haproxy -c -V -f /usr/local/etc/haproxy/haproxy.cfg
