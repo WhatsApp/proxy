@@ -1,0 +1,58 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# License found in the LICENSE file in the root directory
+# of this source tree.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "whatsapp-proxy-chart.fullname" . }}
+  labels:
+    {{- include "whatsapp-proxy-chart.labels" . | nindent 4 }}
+
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    {{- if .Values.service.http_proxy_port }}
+    - port: {{ .Values.service.http_proxy_port }}
+      targetPort: 8080
+      protocol: TCP
+      name: http-proxy
+    {{- end}}
+    {{- if .Values.service.https_proxy_port }}
+    - port: {{ .Values.service.https_proxy_port }}
+      targetPort: 8443
+      protocol: TCP
+      name: https-proxy
+    {{- end}}
+    {{- if .Values.service.jabber_proxy_port }}
+    - port: {{ .Values.service.jabber_proxy_port }}
+      targetPort: 8222
+      protocol: TCP
+      name: jabber-proxy
+    {{- end}}
+    {{- if .Values.service.jabber_port }}
+    - port: {{ .Values.service.jabber_port }}
+      targetPort: 5222
+      protocol: TCP
+      name: jabber
+    {{- end}}
+    {{- if .Values.service.http_port }}
+    - port: {{ .Values.service.http_port }}
+      targetPort: 80
+      protocol: TCP
+      name: http
+    {{- end}}
+    {{- if .Values.service.https_port }}
+    - port: {{ .Values.service.https_port }}
+      targetPort: 443
+      protocol: TCP
+      name: http
+    {{- end}}
+    {{- if .Values.service.stats_port }}
+    - port: {{ .Values.service.stats_port }}
+      targetPort: {{ .Values.service.stats_port }}
+      protocol: TCP
+      name: stats
+    {{- end}}
+  selector:
+    {{- include "whatsapp-proxy-chart.selectorLabels" . | nindent 4 }}

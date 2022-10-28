@@ -1,0 +1,98 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# License found in the LICENSE file in the root directory
+# of this source tree.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "whatsapp-proxy-chart.fullname" . }}
+  labels:
+    {{- include "whatsapp-proxy-chart.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "whatsapp-proxy-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "whatsapp-proxy-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "whatsapp-proxy-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            {{- if .Values.service.http_proxy_port }}
+            - name: http-proxy
+              containerPort: 8080
+              protocol: TCP
+            {{- end}}
+            {{- if .Values.service.http_port }}
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            {{- end}}
+            {{- if .Values.service.https_proxy_port }}
+            - name: https-proxy
+              containerPort: 8443
+              protocol: TCP
+            {{- end}}
+            {{- if .Values.service.https_port }}
+            - name: https
+              containerPort: 443
+              protocol: TCP
+            {{- end}}
+            {{- if .Values.service.jabber_proxy_port }}
+            - name: jabber-proxy
+              containerPort: 8222
+              protocol: TCP
+            {{- end}}
+            {{- if .Values.service.jabber_port }}
+            - name: jabber
+              containerPort: 5222
+              protocol: TCP
+            {{- end}}
+            {{- if .Values.service.stats_port }}
+            - name: stats
+              containerPort: 8199
+              protocol: TCP
+            {{- end}}
+          readinessProbe:
+            exec:
+              command:
+              - /usr/local/bin/healthcheck.sh
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: "PUBLIC_IP"
+              value: "{{ .Values.public_ip }}"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
