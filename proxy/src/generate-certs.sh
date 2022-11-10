@@ -5,7 +5,7 @@
 # of this source tree.
 
 echo "----------------------------"
-echo "| SSL Cert Generator |"
+echo "| SSL Certificate Generation |"
 echo "----------------------------"
 echo
 
