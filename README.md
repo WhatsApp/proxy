@@ -7,18 +7,22 @@ of this source tree. -->
 [<img alt="github" src="https://img.shields.io/badge/github-WhatsApp/proxy-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="20">](https://github.com/WhatsApp/proxy)
 [<img alt="build status" src="https://img.shields.io/github/workflow/status/WhatsApp/proxy/ci/main?style=for-the-badge" height="20">](https://github.com/WhatsApp/proxy/actions?query=branch%3Amain)
 
-If you’re unable to connect to WhatsApp directly through your mobile app you can set up a proxy that will bypass any internet blocks or shutdowns. This proxy supports up to 27,500 concurrent connections.
+If you are unable to connect directly to WhatsApp, a proxy can be used as a gateway between you and our servers. To help yourself or others re-establish connection to WhatsApp, you can set up a proxy server.
+
+If you already have a proxy to use, you can connect it to WhatsApp by following the steps in this [article](https://faq.whatsapp.com/520504143274092).
 
 ## What you'll need
 
 1. [Docker](https://docs.docker.com/engine/install/) (enable Docker on startup if your host system allows)
 2. [Docker compose](https://docs.docker.com/compose/) (optional)
+
 ## Setting up your proxy
 
-### 1. [Install Docker](https://docs.docker.com/get-docker/) for your system
-### 2. Install Docker compose
+### 1. Clone the repository to your local machine
+### 2. [Install Docker](https://docs.docker.com/get-docker/) for your system
+### 3. Install Docker compose
 
-If your version of docker doesn't come pre-installed with Docker compose, you can install a one-off version with (for Linux)
+For Linux users, if your [version of Docker](https://docs.docker.com/desktop/install/linux-install/) doesn't come pre-installed with Docker compose, you can install a one-off version (For Linux).
 
 ```bash
 # Download the pkg
@@ -31,16 +35,18 @@ sudo chmod +x /usr/bin/docker-compose
 Build the proxy host container with
 
 ```bash
-docker build /path/to/git/repo/ -t whatsapp_proxy:1.0
+docker build /path/to/cloned/git/repository/ -t whatsapp_proxy:1.0
 ```
 
-The container will be compiled and tagged as `whatsapp_proxy:1.0` for easy reference
+The container will be compiled and tagged as `whatsapp_proxy:1.0` for easy reference. 
+
+**Please note**, the `/path/to/cloned/git/repository/` should the same folder where you cloned this repository in step 1 above.
 
 ## Running the proxy
 
 ### Manually execute the container
 
-You can manually execute the docker container with the following docker command
+You can manually execute the Docker container with the following `docker` command
 
 ```bash
 docker run -it -p 80:80 -p 443:443 -p 5222:5222 -p 8080:8080 -p 8443:8443 -p 8222:8222 -p 8199:8199 whatsapp_proxy:1.0
@@ -48,13 +54,11 @@ docker run -it -p 80:80 -p 443:443 -p 5222:5222 -p 8080:8080 -p 8443:8443 -p 822
 
 ### Automate the container lifecycle with Docker compose
 
-Docker compose helps manage your container setup and necessary port forwards without user interaction. We recommend utilizing Docker compose because you usually don’t want to manually run the container outside of testing scenarios.
-
-Docker compose is an automated tool to run multi-container deployments, but it also helps automate the command-line arguments necessary to run a single container. It is a YAML definition file that denotes all the settings to start up and run the container. It also has restart strategies in the event the container crashes or self-restarts.
+Docker Compose is an automated tool to run multi-container deployments, but it also helps automate the command-line arguments necessary to run a single container. It is a YAML definition file that denotes all the settings to start up and run the container. It also has restart strategies in the event the container crashes or self-restarts. Docker Compose helps manage your container setup and necessary port forwards without user interaction. We recommend utilizing Docker Compose because you usually don’t want to manually run the container outside of testing scenarios.
 
 We provide a sample [docker-compose.yml](./proxy/ops/docker-compose.yml) file for you which defines a standard deployment of the proxy container.
 
-Once Docker compose is installed, you can test your specific configuration by running Docker compose interactively with
+Once Docker compose is installed, you can test your specific configuration by running Docker compose interactively with:
 
 ```bash
 docker compose -f /path/to/this/repo/docker-compose.yml up
@@ -78,7 +82,7 @@ docker compose down
 
 ### Automate host reboots with Docker compose
 
-Once you have Docker Compose set up, you can also automate the deployment for host reboots by utilizing a `systemd` service (if your hosting environment supports it).
+Once you have Docker compose set up, you can also automate the deployment for host reboots by utilizing a `systemd` service (if your hosting environment supports it).
 
 We provide a sample [`docker_boot.service`](./proxy/ops/docker_boot.service) service definition for you which you should customize to your own environment.
 
