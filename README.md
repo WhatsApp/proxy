@@ -35,12 +35,12 @@ sudo chmod +x /usr/bin/docker-compose
 Build the proxy host container with
 
 ```bash
-docker build /path/to/cloned/git/repository/ -t whatsapp_proxy:1.0
+docker build /path_to_cloned_repository/proxy/ -t whatsapp_proxy:1.0
 ```
 
 The container will be compiled and tagged as `whatsapp_proxy:1.0` for easy reference. 
 
-**Please note**, the `/path/to/cloned/git/repository/` should the same folder where you cloned this repository in step 1 above.
+**Please note**, the `/path_to_cloned_repository` should the same folder where you cloned this repository in step 1 above. Additionally, the Dockerfile to build the container is in a sub-folder **proxy** of the repository.
 
 ## Running the proxy
 
