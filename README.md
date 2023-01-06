@@ -2,7 +2,7 @@
 
 License found in the LICENSE file in the root directory
 of this source tree. -->
-# WhatsApp Chat Proxy
+# WhatsApp Chat Proxy (Media download/upload is not supported)
 
 [<img alt="github" src="https://img.shields.io/badge/github-WhatsApp/proxy-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="20">](https://github.com/WhatsApp/proxy)
 [<img alt="build status" src="https://img.shields.io/github/workflow/status/WhatsApp/proxy/ci/main?style=for-the-badge" height="20">](https://github.com/WhatsApp/proxy/actions?query=branch%3Amain)
