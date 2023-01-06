@@ -9,7 +9,7 @@ of this source tree. -->
 
 If you are unable to connect directly to WhatsApp, a proxy can be used as a gateway between you and our servers. To help yourself or others re-establish connection to WhatsApp, you can set up a proxy server. 
 
-### `Note: WhatsApp Chat Proxy ONLY supports texting. Media (e.g. Images, Videos) upload/download is not supported at the moment.`
+### `Note: WhatsApp Chat Proxy ONLY supports simple texting. Video/Audio Calls and Media (e.g. Images, Videos) upload/download are not supported at the moment.`
 
 If you already have a proxy to use, you can connect it to WhatsApp by following the steps in this [article](https://faq.whatsapp.com/520504143274092).
 
