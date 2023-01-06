@@ -2,12 +2,14 @@
 
 License found in the LICENSE file in the root directory
 of this source tree. -->
-# WhatsApp Chat Proxy (Media download/upload is not supported)
+# WhatsApp Chat Proxy
 
 [<img alt="github" src="https://img.shields.io/badge/github-WhatsApp/proxy-8da0cb?style=for-the-badge&labelColor=555555&logo=github" height="20">](https://github.com/WhatsApp/proxy)
 [<img alt="build status" src="https://img.shields.io/github/workflow/status/WhatsApp/proxy/ci/main?style=for-the-badge" height="20">](https://github.com/WhatsApp/proxy/actions?query=branch%3Amain)
 
-If you are unable to connect directly to WhatsApp, a proxy can be used as a gateway between you and our servers. To help yourself or others re-establish connection to WhatsApp, you can set up a proxy server.
+If you are unable to connect directly to WhatsApp, a proxy can be used as a gateway between you and our servers. To help yourself or others re-establish connection to WhatsApp, you can set up a proxy server. 
+
+### `Note: WhatsApp Chat Proxy ONLY supports texting. Media (e.g. Images, Videos) upload/download is not supported at the moment.`
 
 If you already have a proxy to use, you can connect it to WhatsApp by following the steps in this [article](https://faq.whatsapp.com/520504143274092).
 
