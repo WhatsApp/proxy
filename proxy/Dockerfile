@@ -6,7 +6,7 @@ FROM haproxy:lts-alpine
 
 # Install dependencies for healthcheck support
 USER root
-RUN apk --update --no-cache add curl openssl jq bash
+RUN apk --no-cache add curl openssl jq bash
 
 # Customization variables for certificate generation
 ARG SSL_IP
