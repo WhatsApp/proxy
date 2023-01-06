@@ -9,7 +9,7 @@
 # with the the real public ip. There's an order of priority here which is
 # 1. Environment variable
 # 2. AWS EC2 Metadata endpoint
-#
+# 3. Third-party sources
 # If all fails, we'll just not set the destination IP address
 
 CONFIG_FILE="/usr/local/etc/haproxy/haproxy.cfg"
@@ -28,6 +28,25 @@ then
     if [[ $PUBLIC_IP == '' ]]
     then
         echo "[PROXYHOST] Failed to retrieve public ip address from AWS URI within 2s"
+    fi
+fi
+
+## PUBLIC_IP retrieved from third-party sources
+if [[ $PUBLIC_IP == '' ]]
+then
+    urls=(
+        'https://icanhazip.com/'
+        'https://ipinfo.io/ip'
+        'https://domains.google.com/checkip'
+    )
+
+    # Attempt retrieval of the public ip from the third-party sources
+    for url in "${urls[@]}"; do
+        PUBLIC_IP="$(curl --max-time 2 -s "${url}")"
+    done
+    if [[ $PUBLIC_IP == '' ]]
+    then
+        echo "[PROXYHOST] Failed to retrieve public ip address from third-party sources within 2s"
     fi
 fi
 
