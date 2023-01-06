@@ -52,7 +52,7 @@ fi
 
 # Now if the public IP is available (test is for not-empty)
 # then replace the instances in all haproxy config lines
-if [[ ! -z "$PUBLIC_IP" ]]
+if [[ -n "$PUBLIC_IP" ]]
 then
     echo "[PROXYHOST] Public IP address ($PUBLIC_IP) in-place replacement occurring on $CONFIG_FILE"
     # Replace all instances of #PUBLIC_IP with the
