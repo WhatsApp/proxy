@@ -21,6 +21,7 @@ If you already have a proxy to use, you can connect it to WhatsApp by following 
 ### 1. Clone the repository to your local machine
 ### 2. [Install Docker](https://docs.docker.com/get-docker/) for your system
 ### 3. Install Docker compose
+### 4. apt install docker.io
 
 For Linux users, if your [version of Docker](https://docs.docker.com/desktop/install/linux-install/) doesn't come pre-installed with Docker compose, you can install a one-off version (For Linux).
 
@@ -61,7 +62,7 @@ We provide a sample [docker-compose.yml](./proxy/ops/docker-compose.yml) file fo
 Once Docker compose is installed, you can test your specific configuration by running Docker compose interactively with:
 
 ```bash
-docker compose -f /path/to/this/repo/docker-compose.yml up
+docker-compose -f /path/to/this/repo/docker-compose.yml up
 ```
 
 This will allow you to see the output from the build + container hosting process and check that everything is set up correctly.
@@ -69,7 +70,7 @@ This will allow you to see the output from the build + container hosting process
 When you are ready to run the container as a service, do\*:
 
 ```bash
-docker compose -f /path/to/this/repo/docker-compose.yml up -d
+docker-compose -f /path/to/this/repo/docker-compose.yml up -d
 ```
 
 *\*Note the `-d` flag which means "daemonize" and run as a service.*
