@@ -45,6 +45,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
+  port: 8080
   # http_port: 80
   # https_port: 443
   # jabber_port: 5222
