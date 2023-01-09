@@ -127,8 +127,8 @@ HAProxy statistics.
 
 Ports 443 and 8443 are protected by a self-signed encryption certificate generated at container start time. There are some custom options should you wish to tweak the settings of the generated certificates
 
-* `SSL_DNS` comma seperate list of alternative hostnames, no default
-* `SSL_IP` comma seperate list of alternative IPs, no default
+* `SSL_DNS` comma separate list of alternative hostnames, no default
+* `SSL_IP` comma separate list of alternative IPs, no default
 
 They can be set with commands like
 
