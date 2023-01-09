@@ -12,7 +12,7 @@ RUN apk --update --no-cache add curl openssl jq bash
 ARG SSL_IP
 ARG SSL_DNS
 ## Set Public_IP manually if build fails. Replce YOUR_SERVER_PUBLIC_IP with server IP below. Remove '###' before commit. Issue: 54
-ENV PUBLIC_IP=20.204.27.217
+### ENV PUBLIC_IP=20.204.27.217
 
 # Generate + copy the self-signed certificate settings
 WORKDIR /certs
