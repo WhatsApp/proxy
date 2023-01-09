@@ -126,6 +126,14 @@ on connections. If you have a network load balancer you can preserve the client 
 
 Additionally the container exposes a statistics port on `:8199` which can be connected to directly with `http://<host-ip>:8199` which you can use to monitor
 HAProxy statistics.
+## Deploying a proxy using cloud-init
+To quickly deploy a proxy on a new server without additional linux knowledge, follow these steps:
+
+1. Copy the contents of `cloud/cloud-init.yml` to your clipboard.
+1. Create a new server instance with your desired cloud provider.
+1. During the instance creation process, look for an option to specify "cloud-init" or "user data".
+1. Paste the contents of `cloud/cloud-init.yml` into this field.
+1. Finish creating the server instance.
 
 ## Certificate generation for SSL encrypted ports
 
