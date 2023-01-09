@@ -93,3 +93,4 @@ cat ${SSL_KEY} > proxy.whatsapp.net.pem
 cat ${SSL_CERT} >> proxy.whatsapp.net.pem
 
 echo "Certificate generation completed."
+
