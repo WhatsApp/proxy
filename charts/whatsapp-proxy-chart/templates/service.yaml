@@ -46,7 +46,7 @@ spec:
     - port: {{ .Values.service.https_port }}
       targetPort: 443
       protocol: TCP
-      name: http
+      name: https
     {{- end}}
     {{- if .Values.service.stats_port }}
     - port: {{ .Values.service.stats_port }}
