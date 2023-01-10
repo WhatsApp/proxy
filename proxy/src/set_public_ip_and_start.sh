@@ -71,3 +71,4 @@ popd
 
 # Start HAProxy
 haproxy -f "$CONFIG_FILE"
+
