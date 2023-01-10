@@ -19,3 +19,4 @@ runcmd:
   - sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
   - git clone https://github.com/WhatsApp/proxy.git $HOME/whatsapp-proxy
   - docker compose -f $HOME/whatsapp-proxy/proxy/ops/docker-compose.yml up -d
+  
