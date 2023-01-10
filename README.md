@@ -29,7 +29,7 @@ git clone https://github.com/WhatsApp/proxy.git
 You should see a folder called `proxy` created in the current directory.
 
 ### 2. [Install Docker](https://docs.docker.com/get-docker/) for your system
-To confirm, Docker is successfully installed
+To confirm Docker is successfully installed:
 ```bash
 docker --version
 ```
@@ -70,7 +70,7 @@ You can manually execute the Docker container with the following `docker` comman
 docker run -it -p 80:80 -p 443:443 -p 5222:5222 -p 8080:8080 -p 8443:8443 -p 8222:8222 -p 8199:8199 whatsapp_proxy:1.0
 ```
 
-You will see lines ending with `Certificate generation completed.`. The HAProxy is running in the background.
+You will see lines ending with `Certificate generation completed.`. The HAProxy is running in the background and will continue to do so until you close this process.
 
 
 ### Check your connection
