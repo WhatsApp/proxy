@@ -42,7 +42,7 @@ Build the proxy host container with
 docker build /path_to_cloned_repository/proxy/ -t whatsapp_proxy:1.0
 ```
 
-The container will be compiled and tagged as `whatsapp_proxy:1.0` for easy reference. 
+The container will be compiled and tagged as `whatsapp_proxy:1.0` for easy reference.
 
 **Please note**, the `/path_to_cloned_repository` should the same folder where you cloned this repository in step 1 above. Additionally, the Dockerfile to build the container is in a sub-folder **proxy** of the repository.
 
@@ -124,8 +124,11 @@ on connections. If you have a network load balancer you can preserve the client 
 2. 8443: Standard web traffic, encrypted (HTTPS) with PROXY protocol expected
 3. 8222: Jabber protocol traffic (WhatsApp default) with PROXY protocol expected
 
-Additionally the container exposes a statistics port on `:8199` which can be connected to directly with `http://<host-ip>:8199` which you can use to monitor
-HAProxy statistics.
+## Monitoring
+The container exposes a statistics port on `:8199` which can be connected to directly with `http://<host-ip>:8199` which you can use to monitor HAProxy statistics.
+
+If you prefer OpenMetrics output you can use `http://<host-ip>:8199/metrics` for monitoring HAProxy metrics.
+
 
 ## Certificate generation for SSL encrypted ports
 
