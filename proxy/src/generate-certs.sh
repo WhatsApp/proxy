@@ -9,9 +9,10 @@ echo "| SSL Certificate Generation |"
 echo "----------------------------"
 echo
 
+export RANDOM_CA=$(head -c 60 /dev/urandom | tr -dc 'a-zA-Z0-9')
 export CA_KEY="ca-key.pem"
 export CA_CERT="ca.pem"
-export CA_SUBJECT="whatsapp.selfsigned"
+export CA_SUBJECT="${RANDOM_CA}"
 export CA_EXPIRE="36500" # 100 years
 
 export SSL_CONFIG="openssl.cnf"
@@ -21,13 +22,15 @@ export SSL_CERT="cert.pem"
 export SSL_SIZE="2048"
 export SSL_EXPIRE="3650" # 10 years
 
-export SSL_SUBJECT="proxy.whatsapp.net"
+export RANDOM_SSL=$(head -c 60 /dev/urandom | tr -dc 'a-zA-Z0-9')
+export SSL_SUBJECT="${RANDOM_SSL}.net"
 export SSL_DNS=${SSL_DNS}
 export SSL_IP=${SSL_IP}
 
 export DEBUG=${DEBUG:=1}
 
 echo "--> Certificate Authority"
+echo "Generating certs for ${SSL_SUBJECT}"
 
 if [[ -e ./${CA_KEY} ]]; then
     echo "====> Using existing CA Key ${CA_KEY}"
