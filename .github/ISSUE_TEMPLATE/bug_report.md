@@ -12,7 +12,7 @@ about: Report a bug for the proxy
 <!-- 
 There are several steps to successfully build and run a proxy. Each step
 in the README describes how one can check whether the step has succeeded.
-Include the name of the step that failed here from the list:
+Include the name of the step that **failed** from the list:
 
 Setup
 1. Clone the repository to your local machine
@@ -27,3 +27,6 @@ Running the proxy
 
 #### More Details
 <!-- Add which commands you run in the failed step, what the outputs were. -->
+
+<!-- Add the platform information you are on (operating system, Docker version etc.)
+(never share private information!) -->
