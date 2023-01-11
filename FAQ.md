@@ -43,3 +43,7 @@ WhatsApp currently does **NOT** support anything besides TCP proxying. This is j
 to WhatsApp on the other end. So we don't support running through any intermediary that is a HTTP proxy.
 
 You are free to run your own pure TCP proxy as you see fit however, as long as it forwards to `g.whatsapp.net`. You aren't required to use this realization.
+
+### (6) haproxy `cannot bind socket (Permission denied)`
+
+See https://github.com/docker-library/haproxy/issues/160 for possible solutions.
