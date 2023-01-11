@@ -78,7 +78,7 @@ To confirm HAProxy is running, visit `http://<host-ip>:8199` where `<host-ip>` i
 
 > NOTE: If your public IP address is not accessible, you will need to enable port forwarding (for the ports above) for the router/gateway you are using. Since this operation is device-specific, we are not going to go into it in details in this doc.
 
-If you prefer OpenMetrics output you can use `localhost:8199/metrics` (locally) or `http://<host-ip>:8199/metrics` (remotely) for monitoring HAProxy metrics.
+If you prefer OpenMetrics output you can use `http://<host-ip>:8199/metrics` for monitoring HAProxy metrics.
 
 # Miscellanous
 
