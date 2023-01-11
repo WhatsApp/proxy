@@ -12,8 +12,9 @@ After=docker.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-WorkingDirectory=/root/wa
-ExecStart=docker compose -f /root/whatsapp_proxy/docker-compose.yml up -d
+WorkingDirectory=/root/whatsapp_proxy/proxy/ops
+ExecStart=docker compose up -d
+ExecStop=docker compose stop
 
 [Install]
 WantedBy=multi-user.target
