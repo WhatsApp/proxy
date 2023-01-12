@@ -22,6 +22,14 @@ If you already have a proxy to use, you can connect it to WhatsApp by following 
 
 ## Setting up your proxy
 
+**UPDATE** There is now a pre-built image hosted in Meta's DockerHub repository. You no longer need to build the default image (if you don't want to customize it of course).
+
+```bash
+docker pull facebook/whatsapp_proxy:latest
+```
+
+You can then skip down to **Running the proxy** and substitute any tag of `whatsapp_proxy:1.0` with `facebook/whatsapp_proxy:latest`. 
+
 ### 1. Clone the repository to your local machine
 ```bash
 git clone https://github.com/WhatsApp/proxy.git
