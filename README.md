@@ -175,6 +175,7 @@ docker ps
 
 If you would like to configure your proxy using Kubernetes, or run the Docker runtime through Kubernetes, please see our [Helm chart README](./charts/README.md)
 
+Read more about other type of deployments [here](/docs/deployments.md).
 
 # Contributors
 ------------
