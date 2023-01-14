@@ -34,7 +34,7 @@ Once the AWS CLI tool has been installed, you will need to configure it. You wil
 Now, in a terminal window, type:
 
 ```
-$ aws configure
+aws configure
 ```
 
 Follow the steps to enter your access key ID and secret access key. Enter the region that you will be using (if you are unsure, you can use `us-east-1`). For output type, use `json`.
@@ -54,7 +54,7 @@ Install the `eksctl` tool for your operating system as outlined in this page: ht
 To create your Kubernetes cluster, run the following command:
 
 ```
-$ eksctl create cluster --name <cluster_name> --region <region_code>
+eksctl create cluster --name <cluster_name> --region <region_code>
 ```
 
 Replace `<cluster_name>` with a name of your choosing for your Kubernetes cluster, and `<region_code>` with the name of the region that you chose to use in AWS (e.g. `us-east-1`).
@@ -70,7 +70,7 @@ Cannot create cluster 'sample-cluster' because us-east-1d, the targeted availabi
 Rerun the above command, adding the `--zones` paramter with at least two availability zones from the list of suggested availability zones shown in the error. Your modified command should look similar to the following:
 
 ```
-$ eksctl create cluster --name <cluster_name> --region <region_code> --zones us-east-1a,us-east-1b
+eksctl create cluster --name <cluster_name> --region <region_code> --zones us-east-1a,us-east-1b
 ```
 
 #### Install kubectl
@@ -90,7 +90,7 @@ Follow the instructions for your operating system as outlined in this page: http
 To access your Kubernetes from `kubectl`, run the following command:
 
 ```
-$ aws eks --region <region_code> update-kubeconfig --name <cluster_name>
+aws eks --region <region_code> update-kubeconfig --name <cluster_name>
 ```
 
 Replace `<region_code>` with the name of the AWS region you used, and `<cluster_name>` with the name of the cluster you created.
@@ -98,7 +98,7 @@ Replace `<region_code>` with the name of the AWS region you used, and `<cluster_
 If this command was successful, you should now be able to access your Kubernetes cluster using `kubectl`. Run the following command:
 
 ```
-$ kubectl get svc
+kubectl get svc
 ```
 
 You should get an output like the following:
@@ -121,13 +121,13 @@ We will need to install the AWS Load Balancer Controller add-on, as outlined in 
 First, download the IAM policy file:
 
 ```
-$ curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.6/docs/install/iam_policy.json
+curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.6/docs/install/iam_policy.json
 ```
 
 Next, create an IAM policy using the file that you downloaded, by running the following command:
 
 ```
-$ aws iam create-policy \
+aws iam create-policy \
     --policy-name AWSLoadBalancerControllerIAMPolicy \
     --policy-document file://iam_policy.json
 ```
@@ -135,7 +135,7 @@ $ aws iam create-policy \
 Then, create a service account role for the load balancer controller, by running the following command:
 
 ```
-$ eksctl create iamserviceaccount \
+eksctl create iamserviceaccount \
   --cluster=<cluster_name> \
   --namespace=kube-system \
   --name=aws-load-balancer-controller \
@@ -149,19 +149,19 @@ In the above command, replace `<cluster_name>` with the name of your cluster and
 Next, add the `eks-charts` repository to helm as follows:
 
 ```
-$ helm repo add eks https://aws.github.io/eks-charts
+helm repo add eks https://aws.github.io/eks-charts
 ```
 
 Update your local helm repository index as follows:
 
 ```
-$ helm repo update
+helm repo update
 ```
 
 Finally, run the following command to install the AWS Load Balancer Controller add-on:
 
 ```
-$ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \
   --set clusterName=<cluster_name> \
   --set serviceAccount.create=false \
@@ -178,7 +178,7 @@ Replace `<cluster_name>` with the name of your cluster.
 > 
 > For example, if you are using region `us-east-1`, the command you run should look like the following:
 > ```
-> $ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+> helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 >   -n kube-system \
 >   --set clusterName=<cluster_name> \
 >   --set serviceAccount.create=false \
@@ -189,7 +189,7 @@ Replace `<cluster_name>` with the name of your cluster.
 If the previous command was successful, the running the following:
 
 ```
-$ kubectl get deployment -n kube-system aws-load-balancer-controller
+kubectl get deployment -n kube-system aws-load-balancer-controller
 ```
 
 You should see an output like the following:
