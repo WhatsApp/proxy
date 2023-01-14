@@ -76,3 +76,20 @@ Actually thanks to recent community fixes, HAProxy is no longer printing
 any warning messages. Your host is actually running in interactive mode. You should be able to navigate to the host's port 8199 to view the statistics page ([http://localhost:8199](http://localhost:8199) on the machine running the proxy).
 
 Related issue [#71](https://github.com/WhatsApp/proxy/issues/71)
+
+### (10) Why isn't there a pre-built image on DockerHub?
+
+Apologies in the delay, but it takes some time to organize access to the 
+correct repositories. We're happy to announce there is now a pre-built image
+based on the latest version in this repository. We'll strive to keep it
+up-to-date as well. You can pull it (without needing to build locally) from
+
+```bash
+docker pull facebook/whatsapp_proxy:latest
+```
+
+After you've pulled the image, you can then run it with the same run commands as before except substituting in `facebook/whatsapp_proxy:latest` instead of `whatsapp_proxy:1.0`. This will point to the latest image for you without having to worry about building it yourself. Example run command might be
+
+```bash
+docker run -it -p 80:80 -p 443:443 -p 5222:5222 facebook/whatsapp_proxy:latest
+```
