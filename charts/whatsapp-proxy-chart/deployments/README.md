@@ -1,6 +1,12 @@
 # Chart Deployment
 This document explains how to create a Kuberentes cluster in one of the popular public cloud providers (e.g. AWS, GCP), and deploy the WhatsApp proxy Helm chart to your Kubernetes cluster.
 
+## Prerequisites
+
+### Helm
+
+Install Helm using one of the methods outlined in this page: https://helm.sh/docs/intro/install/
+
 ## Create a Kubernetes cluster
 To deploy your Helm chart, you will first need to create a Kubernetes cluster. You can create a simple Kubernetes cluster on a single server using one of the following tools:
 
@@ -16,7 +22,7 @@ The rest of the document will explain how to create a Kubernetes cluster on a ma
 * AWS: Amazon EKS (Elastic Kubernetes Service)
 * GCP: GKE (Google Kubernetes Engine)
 
-### Create a Kubernetes cluster on Amazon EKS
+### Create a Kubernetes cluster on Amazon Elastic Kubernetes Service (EKS)
 To create a Kubernetes cluster on Amazon EKS, you will need an AWS account: https://aws.amazon.com/
 
 #### Install AWS CLI
@@ -81,7 +87,7 @@ Follow the instructions for your operating system as outlined in this page: http
 
 > **Important**: The version of `kubectl` you install is important. The minor version of the installed `kubectl` cannot be more than 1 version different from your Kubernetes cluster version.
 > 
-> You can check the version of your Kubernetes cluster in EKS by going to https://us-east-1.console.aws.amazon.com/eks/home?region=us-east-1. In the list, you can see the Kubernetes version.
+> You can check the version of your Kubernetes cluster in EKS by going to https://console.aws.amazon.com/eks/. In the list, you can see the Kubernetes version for your cluster.
 > 
 > For example, if your cluster's Kubernetes version is 1.23, the `kubectl` version that you install cannot be lower than 1.22.x or higher than 1.24.x. You should always install the latest version of `kubectl` that is compatible with your Kubernetes cluster, so in this case, the latest `kubectl` version that you can install is 1.24.9.
 
@@ -107,10 +113,6 @@ You should get an output like the following:
 NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 kubernetes   ClusterIP   10.100.0.1   <none>        443/TCP   2d15h
 ```
-
-#### Install Helm
-
-Install Helm using one of the methods outlined in this page: https://helm.sh/docs/intro/install/
 
 #### Install the AWS Load Balancer Controller
 
@@ -200,3 +202,89 @@ aws-load-balancer-controller   2/2     2            2           84s
 ```
 
 Your Kubernetes cluster is now ready for deployments.
+
+### Create a Kubernetes cluster on Google Kubernetes Engine (GKE)
+
+To create a Kubernetes cluster on Google Kubernetes Engine, you will need a Google Cloud Platform account. Go to https://console.cloud.google.com/ to create an account.
+
+#### Install `gcloud` CLI
+
+First, start by installing the `gcloud` CLI tool. Follow the instructions for your operatint systems as outlined on this page: https://cloud.google.com/sdk/docs/install
+
+Once `gcloud` has been installed, run the following command to authenticate the tool with your account:
+
+```
+gcloud auth login
+```
+
+Follow the steps in the browser window that opens to log in to your Google Cloud Platform account, and give permissions to the `gcloud` CLI tool to access your account.
+
+#### Create a Kubernetes cluster on GKE
+
+To create a Kubernetes cluter on GKE, we can use either the Google Cloud console, or the `gcloud` CLI tool. In this document, we will use the Google Cloud console.
+
+1. Go to https://console.cloud.google.com/kubernetes.
+    * If you see an 'Enable API' button, click it.
+2. Once the GKE dashboard shows, click the 'Create' button at the top of the page.
+3. GKE gives you two options for Kubernetes cluster creation and management: Standard and Autopilot. In this document, we will choose Standard. Click the 'Configure' button next to Standard.
+4. In the next page, give your Kubernetes cluster a name.
+5. Under 'Location type', if 'Zonal' is selected, note the selected zone name. If 'Regional' is selected, note the selected region name.
+6. For the purposes of this document, you can leave the other options unchanged.
+7. Click 'Create'.
+
+It will take a few minutes for GKE to create the Kubernetes cluster.
+
+Once the Kubernetes cluster has been created, continue to the next section.
+
+#### Install kubectl
+
+Next, you will need to install the `kubectl` tool. `kubectl` is your main point of interaction with your Kubenernetes cluster, once you create your cluster.
+
+Follow the instructions for your operating system as outlined in this page: https://kubernetes.io/docs/tasks/tools/
+
+> **Important**: The version of `kubectl` you install is important. The minor version of the installed `kubectl` cannot be more than 1 version different from your Kubernetes cluster version.
+> 
+> You can check the version of your Kubernetes cluster in GKE by going to https://console.cloud.google.com/kubernetes. In the list of clusters, click on the name of your cluster. In the cluster details page, under the 'Cluster basics' section, you can see the Kubernetes version for your cluster.
+> 
+> For example, if your cluster's Kubernetes version is 1.24.7-..., the `kubectl` version that you install cannot be lower than 1.23.x or higher than 1.25.x. You should always install the latest version of `kubectl` that is compatible with your Kubernetes cluster, so in this case, the latest `kubectl` version that you can install is 1.25.5.
+
+#### Connect `kubectl` to your Kubernetes cluster
+
+To access your Kubernetes from `kubectl`, first install an authentication plugin for the `gcloud` CLI tool by running the following command:
+
+```
+gcloud components install gke-gcloud-auth-plugin
+```
+
+Once the plugin has been installed, connect `kubectl` to your Kubernetes cluster by running one of the following commands:
+
+If your cluster's location type was zonal, run the following command:
+
+```
+gcloud container clusters get-credentials <cluster_name> --zone <zone_name>
+```
+
+Replace `<cluster_name>` with the name you used for your cluster, and `<zone_name>` with the name of the zone your cluster was created in.
+
+If your cluster's location type was regional, run the following command:
+
+```
+gcloud container clusters get-credentials <cluster_name> --region <region_name>
+```
+
+Replace `<cluster_name>` with the name you used for your cluster, and `<region_name>` with the name of the region your cluster was created in.
+
+If the above command was successful, the running the following command:
+
+```
+kubectl get svc
+```
+
+should output something like the following:
+
+```
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.72.0.1    <none>        443/TCP   19h
+```
+
+You Kubernetes cluster is now ready for deployments.
