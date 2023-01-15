@@ -258,21 +258,21 @@ gcloud components install gke-gcloud-auth-plugin
 
 Once the plugin has been installed, connect `kubectl` to your Kubernetes cluster by running one of the following commands:
 
-If your cluster's location type was zonal, run the following command:
+* If your cluster's location type was zonal, run the following command:
 
-```
-gcloud container clusters get-credentials <cluster_name> --zone <zone_name>
-```
+  ```
+  gcloud container clusters get-credentials <cluster_name> --zone <zone_name>
+  ```
 
-Replace `<cluster_name>` with the name you used for your cluster, and `<zone_name>` with the name of the zone your cluster was created in.
+  Replace `<cluster_name>` with the name you used for your cluster, and `<zone_name>` with the name of the zone your cluster was created in.
 
-If your cluster's location type was regional, run the following command:
+* If your cluster's location type was regional, run the following command:
 
-```
-gcloud container clusters get-credentials <cluster_name> --region <region_name>
-```
+  ```
+  gcloud container clusters get-credentials <cluster_name> --region <region_name>
+  ```
 
-Replace `<cluster_name>` with the name you used for your cluster, and `<region_name>` with the name of the region your cluster was created in.
+  Replace `<cluster_name>` with the name you used for your cluster, and `<region_name>` with the name of the region your cluster was created in.
 
 If the above command was successful, the running the following command:
 
