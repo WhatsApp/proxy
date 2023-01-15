@@ -288,3 +288,36 @@ kubernetes   ClusterIP   10.72.0.1    <none>        443/TCP   19h
 ```
 
 You Kubernetes cluster is now ready for deployments.
+
+## Deploying the Helm Chart to Your Kubernetes Cluster
+
+After you have created your Kubernetes cluster and set up `kubectl` to access it, deploying the WhatsApp proxy Helm chart is very simple.
+
+From the root of the chart directory (`whatsapp-proxy-chart/`), run one of the following commands:
+
+* If you created your Kubernetes cluster on Amazon EKS, run the following command:
+  ```
+  helm install whatsapp-proxy . -f deployments/overrides/values.eks.yaml
+  ```
+* If you created your Kubernetes cluster on GKE, run the following command:
+  ```
+  helm install whatsapp-proxy . -f deployments/overrides/values.gke.yaml
+  ```
+
+The above command will install the Helm chart on your Kubernetes cluster.
+
+To get the public endpoint for your deployment, run the following:
+
+```
+kubectl get svc
+```
+
+The output should look like the following:
+
+```
+NAME                                  TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)                                                                                                 AGE
+kubernetes                            ClusterIP      10.72.0.1     <none>        443/TCP                                                                                                 19h
+whatsapp-proxy-whatsapp-proxy-chart   LoadBalancer   10.72.2.240   <PUBLIC_ENDPOINT>     8080:32220/TCP,8443:32287/TCP,8222:30054/TCP,5222:32734/TCP,80:31717/TCP,443:32498/TCP,8199:30617/TCP   3s
+```
+
+The public endpoint for your deployment will appear under EXTERNAL-IP.
