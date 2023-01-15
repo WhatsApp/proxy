@@ -3,10 +3,10 @@
 # License found in the LICENSE file in the root directory
 # of this source tree.
 
-# Values override for whatsapp-proxy-chart for deploying to Amazon EKS.
+# Values override for whatsapp-proxy-chart for deploying to Google Kubernetes Engine (GKE).
 # Note: This values override file is not part of the core project.
 # Rather, it is provided here as an example override file to help with
-# deployment to Amazon's EKS service.
+# deployment to Google Kubernetes Engine.
 
 service:
   type: LoadBalancer
