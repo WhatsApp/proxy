@@ -19,7 +19,7 @@ export SSL_CONFIG="openssl.cnf"
 export SSL_KEY="key.pem"
 export SSL_CSR="key.csr"
 export SSL_CERT="cert.pem"
-export SSL_SIZE="2048"
+export SSL_SIZE="4096"
 export SSL_EXPIRE="3650" # 10 years
 
 export RANDOM_SSL=$(head -c 60 /dev/urandom | tr -dc 'a-zA-Z0-9')
@@ -36,7 +36,7 @@ if [[ -e ./${CA_KEY} ]]; then
     echo "====> Using existing CA Key ${CA_KEY}"
 else
     echo "====> Generating new CA key ${CA_KEY}"
-    openssl genrsa -out ${CA_KEY} 2048
+    openssl genrsa -out ${CA_KEY} 4096
 fi
 
 if [[ -e ./${CA_CERT} ]]; then
