@@ -22,9 +22,27 @@ If you already have a proxy to use, you can connect it to WhatsApp by following 
 
 ## Setting up your proxy
 
+**UPDATE** There is now a pre-built image hosted in Meta's DockerHub repository. You no longer need to build the default image (if you don't want to customize it of course).
+
+```bash
+docker pull facebook/whatsapp_proxy:latest
+```
+
+You can then skip down to **Running the proxy** and substitute any tag of `whatsapp_proxy:1.0` with `facebook/whatsapp_proxy:latest`. 
+
 ### 1. Clone the repository to your local machine
+```bash
+git clone https://github.com/WhatsApp/proxy.git
+```
+You should see a folder called `proxy` created in the current directory.
+
 ### 2. [Install Docker](https://docs.docker.com/get-docker/) for your system
-### 3. Install Docker compose
+To confirm Docker is successfully installed:
+```bash
+docker --version
+```
+should display a line similar to `Docker version 20.10.21, build baeda1f`.
+### 2. (Optional) Install Docker compose
 
 For Linux users, if your [version of Docker](https://docs.docker.com/desktop/install/linux-install/) doesn't come pre-installed with Docker compose, you can install a one-off version (For Linux).
 
@@ -36,15 +54,19 @@ sudo chmod +x /usr/bin/docker-compose
 ```
 ### 3. Build the proxy host container
 
+Navigate to the repo directory
+
+```bash
+cd proxy
+```
+
 Build the proxy host container with
 
 ```bash
-docker build /path_to_cloned_repository/proxy/ -t whatsapp_proxy:1.0
+docker build proxy/ -t whatsapp_proxy:1.0
 ```
 
-The container will be compiled and tagged as `whatsapp_proxy:1.0` for easy reference. 
-
-**Please note**, the `/path_to_cloned_repository` should the same folder where you cloned this repository in step 1 above. Additionally, the Dockerfile to build the container is in a sub-folder **proxy** of the repository.
+You should see a message similar to `[+] Building 6.6s (18/18) FINISHED`. The container will be compiled and tagged as `whatsapp_proxy:1.0` for easy reference.
 
 ## Running the proxy
 
@@ -55,6 +77,50 @@ You can manually execute the Docker container with the following `docker` comman
 ```bash
 docker run -it -p 80:80 -p 443:443 -p 5222:5222 -p 8080:8080 -p 8443:8443 -p 8222:8222 -p 8199:8199 whatsapp_proxy:1.0
 ```
+
+You will see lines ending with `Certificate generation completed.`. The HAProxy is running in the background and will continue to do so until you close this process.
+
+
+### Check your connection
+To confirm HAProxy is running, visit `http://<host-ip>:8199` where `<host-ip>` is your **public** IP address. You can also use this link to monitor proxy statistics. 
+
+> NOTE: If your public IP address is not accessible, you will need to enable port forwarding (for the ports above) for the router/gateway you are using. Since this operation is device-specific, we are not going to go into it in details in this doc.
+
+If you prefer OpenMetrics output you can use `http://<host-ip>:8199/metrics` for monitoring HAProxy metrics.
+
+# Miscellanous
+
+## An Overview of the WhatsApp Proxy Architecture
+
+Depending on the scenario in which you utilize your proxy, the proxy container exposes multiple ports. The basic ports may include:
+
+1. 80: Standard web traffic (HTTP)
+2. 443: Standard web traffic, encrypted (HTTPS)
+3. 5222: Jabber protocol traffic (WhatsApp default)
+
+There are also ports configured which accept incoming [proxy headers](https://www.haproxy.com/blog/use-the-proxy-protocol-to-preserve-a-clients-ip-address/) (version 1 or 2)
+on connections. If you have a network load balancer you can preserve the client IP address if you want.
+
+1. 8080: Standard web traffic (HTTP) with PROXY protocol expected
+2. 8443: Standard web traffic, encrypted (HTTPS) with PROXY protocol expected
+3. 8222: Jabber protocol traffic (WhatsApp default) with PROXY protocol expected
+
+
+## Certificate generation for SSL encrypted ports
+
+Ports 443 and 8443 are protected by a self-signed encryption certificate generated at container start time. There are some custom options should you wish to tweak the settings of the generated certificates
+
+* `SSL_DNS` comma separate list of alternative hostnames, no default
+* `SSL_IP` comma separate list of alternative IPs, no default
+
+They can be set with commands like
+
+```bash
+docker build . --build-arg SSL_DNS=test.example.com
+```
+
+
+## Advanced
 
 ### Automate the container lifecycle with Docker compose
 
@@ -109,36 +175,7 @@ docker ps
 
 If you would like to configure your proxy using Kubernetes, or run the Docker runtime through Kubernetes, please see our [Helm chart README](./charts/README.md)
 
-# An Overview of the WhatsApp Proxy Architecture
-
-Depending on the scenario in which you utilize your proxy, the proxy container exposes multiple ports. The basic ports may include:
-
-1. 80: Standard web traffic (HTTP)
-2. 443: Standard web traffic, encrypted (HTTPS)
-3. 5222: Jabber protocol traffic (WhatsApp default)
-
-There are also ports configured which accept incoming [proxy headers](https://www.haproxy.com/blog/use-the-proxy-protocol-to-preserve-a-clients-ip-address/) (version 1 or 2)
-on connections. If you have a network load balancer you can preserve the client IP address if you want.
-
-1. 8080: Standard web traffic (HTTP) with PROXY protocol expected
-2. 8443: Standard web traffic, encrypted (HTTPS) with PROXY protocol expected
-3. 8222: Jabber protocol traffic (WhatsApp default) with PROXY protocol expected
-
-Additionally the container exposes a statistics port on `:8199` which can be connected to directly with `http://<host-ip>:8199` which you can use to monitor
-HAProxy statistics.
-
-## Certificate generation for SSL encrypted ports
-
-Ports 443 and 8443 are protected by a self-signed encryption certificate generated at container start time. There are some custom options should you wish to tweak the settings of the generated certificates
-
-* `SSL_DNS` comma separate list of alternative hostnames, no default
-* `SSL_IP` comma separate list of alternative IPs, no default
-
-They can be set with commands like
-
-```bash
-docker build . --build-arg SSL_DNS=test.example.com
-```
+Read more about other type of deployments [here](/docs/deployments.md).
 
 # Contributors
 ------------

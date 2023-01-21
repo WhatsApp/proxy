@@ -43,3 +43,53 @@ WhatsApp currently does **NOT** support anything besides TCP proxying. This is j
 to WhatsApp on the other end. So we don't support running through any intermediary that is a HTTP proxy.
 
 You are free to run your own pure TCP proxy as you see fit however, as long as it forwards to `g.whatsapp.net`. You aren't required to use this realization.
+
+### (6) haproxy `cannot bind socket (Permission denied)`
+
+See https://github.com/docker-library/haproxy/issues/160 for possible solutions.
+
+### (7) Why do I need to expose 7 ports? 
+
+The short answer is you don't. The primary ports WhatsApp uses can be 80, 443, or 5222. The other 3 connection ports are if you're hosting the 
+proxy in an environment that will send the PROXY header (if you don't know what this is, you likely don't need to expose these ports). 
+
+The last port is 8199 which is the "statistics" port of the underlying proxy process, HAProxy. We find this port is helpful for testing if your system is alive
+and running properly or not. While the other ports 80 and 443 look like normal HTTP and HTTPS ports, your browser will not be able to connect to them as they
+are just TCP forwarding the traffic to a server that is **NOT** HTTP based. For this reason, the statistics is a quick and easy way to check host health. 
+
+That being said, if you're worried about detection, once running we recommend disabling all non-necessary ports. A **typical** host configuration would likely
+just expose 80, 443, and 5222. You may re-map those however as you see fit, see point (4) above.
+
+### (8) I'm seeing something like `executor failed running [/bin/sh -c apk --no-cache add curl openssl jq bash]: exit code: 4`
+
+Please try re-building the container without the docker cache enabled.
+
+```bash
+docker build --no-cache proxy/ -t whatsapp-proxy:1.0
+```
+
+If you're still seeing a problem, you may fill out a bug report in the issues filling out all the requested information in the template.
+
+### (9) Container is stuck after certificate generation
+
+Actually thanks to recent community fixes, HAProxy is no longer printing 
+any warning messages. Your host is actually running in interactive mode. You should be able to navigate to the host's port 8199 to view the statistics page ([http://localhost:8199](http://localhost:8199) on the machine running the proxy).
+
+Related issue [#71](https://github.com/WhatsApp/proxy/issues/71)
+
+### (10) Why isn't there a pre-built image on DockerHub?
+
+Apologies in the delay, but it takes some time to organize access to the 
+correct repositories. We're happy to announce there is now a pre-built image
+based on the latest version in this repository. We'll strive to keep it
+up-to-date as well. You can pull it (without needing to build locally) from
+
+```bash
+docker pull facebook/whatsapp_proxy:latest
+```
+
+After you've pulled the image, you can then run it with the same run commands as before except substituting in `facebook/whatsapp_proxy:latest` instead of `whatsapp_proxy:1.0`. This will point to the latest image for you without having to worry about building it yourself. Example run command might be
+
+```bash
+docker run -it -p 80:80 -p 443:443 -p 5222:5222 facebook/whatsapp_proxy:latest
+```
