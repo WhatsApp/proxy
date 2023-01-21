@@ -14,6 +14,15 @@
 
 CONFIG_FILE="/usr/local/etc/haproxy/haproxy.cfg"
 
+## Custom function to use as curl wrapper
+# --silent: to reduce the nois eof response
+# --show-error: to show errors in the response
+# --fail: to fail on non-200 responses
+# --ipv4: to force ipv4 resolution
+function fetch() {
+  curl --silent --show-error --fail --ipv4 "$@"
+}
+
 ## PUBLIC_IP supplied from environment variable
 if [[ $PUBLIC_IP == '' ]]
 then
@@ -24,7 +33,7 @@ fi
 if [[ $PUBLIC_IP == '' ]]
 then
     # Attempt retrieval of the public ip from the meta-data instance
-    PUBLIC_IP=$(curl --max-time 2 -s http://169.254.169.254/latest/meta-data/public-ipv4)
+    PUBLIC_IP=$(fetch --max-time 2 http://169.254.169.254/latest/meta-data/public-ipv4)
     if [[ $PUBLIC_IP == '' ]]
     then
         echo "[PROXYHOST] Failed to retrieve public ip address from AWS URI within 2s"
@@ -42,7 +51,7 @@ then
 
     # Attempt retrieval of the public ip from the third-party sources
     for url in "${urls[@]}"; do
-        PUBLIC_IP="$(curl --silent --show-error --fail --ipv4 --max-time 2 "${url}")" && break
+        PUBLIC_IP="$(fetch --max-time 2 "${url}")" && break
     done
     if [[ $PUBLIC_IP == '' ]]
     then
