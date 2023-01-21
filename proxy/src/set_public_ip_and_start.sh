@@ -42,7 +42,7 @@ then
 
     # Attempt retrieval of the public ip from the third-party sources
     for url in "${urls[@]}"; do
-        PUBLIC_IP="$(curl --max-time 2 -s "${url}")"
+        PUBLIC_IP="$(curl --silent --show-error --fail --ipv4 --max-time 2 "${url}")" && break
     done
     if [[ $PUBLIC_IP == '' ]]
     then
