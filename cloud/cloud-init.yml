@@ -1,7 +1,6 @@
 #cloud-config
 
 package_update: true
-
 package_upgrade: true
 
 packages:
@@ -10,13 +9,40 @@ packages:
  - gnupg
  - lsb-release
  - git
- 
+
 runcmd:
   - sudo mkdir -p /etc/apt/keyrings
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --import
+  - FINGERPRINT="9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88"
+  - if [ "$(sudo gpg --verify-options show-notations --verify /etc/apt/keyrings/docker.gpg | grep "$FINGERPRINT" | wc -l)" -eq 0 ]; then echo "Docker keyring fingerprint does not match expected value." && exit 1; fi
   - echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
   - sudo apt-get update
-  - sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-  - git clone https://github.com/WhatsApp/proxy.git $HOME/whatsapp-proxy
-  - docker compose -f $HOME/whatsapp-proxy/proxy/ops/docker-compose.yml up -d
-
+  - sudo apt-get install -y docker-ce=5:20.10.2~ce~3-0~ubuntu
+  - sudo useradd -r -s /sbin/nologin docker
+  - sudo usermod -aG docker $USER
+  - echo 'DOCKER_OPTS="-H unix:///var/run/docker.sock --userland-proxy-path /usr/lib/docker/docker-proxy-current -g /var/lib/docker --userland-proxy-user=docker --userland-proxy-group=docker"' | sudo tee -a /etc/default/docker
+  - sudo systemctl enable --now docker
+  - sudo iptables -I INPUT -p tcp --dport 2375 -j DROP
+  - sudo iptables -I INPUT -p tcp --dport 2376 -j DROP
+  - sudo iptables -I INPUT -p tcp --dport 2377 -j DROP
+  - sudo iptables -I INPUT -p tcp --dport 2378 -j DROP
+  - export GIT_REPO_URL=$(cat /path/to/secrets/git_repo_url.txt)
+  - git clone $GIT_REPO_URL $HOME/whatsapp-proxy
+  - sudo chown -R $USER:docker $HOME/whatsapp-proxy
+  - docker-compose -f $HOME/whatsapp-proxy/proxy/ops/docker-compose.yml up -d
+  - sudo apt-get install -y lynis
+  - sudo lynis audit system
+  - sudo apt-get install -y docker-bench-security
+  - sudo docker-bench-security
+  - sudo apt-get install -y clamav
+  - sudo freshclam
+  - sudo clamscan -r $HOME/whatsapp-proxy
+  - sudo apt-get install -y fail2ban
+  - sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+  - sudo echo "[sshd]" | sudo tee -a /etc/fail2ban/jail.local
+  - sudo echo "enabled = true" | sudo tee -a /etc/fail2ban/jail.local
+  - sudo echo "port = 22" | sudo tee -a /etc/fail2ban/jail.local
+  - sudo echo "filter = sshd" | sudo tee -a /etc/fail2ban/jail.local
+  - sudo echo "logpath = /var/log/auth.log" | sudo tee -a /etc/fail2ban/jail.local
+  - sudo echo "maxretry = 3" | sudo tee -a /etc/fail2ban/jail.local
+  - sudo systemctl enable --now fail2ban
