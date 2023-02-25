@@ -28,20 +28,26 @@ If you already have a proxy to use, you can connect it to WhatsApp by following 
 docker pull facebook/whatsapp_proxy:latest
 ```
 
-You can then skip down to **Running the proxy** and substitute any tag of `whatsapp_proxy:1.0` with `facebook/whatsapp_proxy:latest`. 
+You can then skip down to **Running the proxy** and substitute any tag of `whatsapp_proxy:1.0` with `facebook/whatsapp_proxy:latest`.
 
 ### 1. Clone the repository to your local machine
+
 ```bash
 git clone https://github.com/WhatsApp/proxy.git
 ```
+
 You should see a folder called `proxy` created in the current directory.
 
 ### 2. [Install Docker](https://docs.docker.com/get-docker/) for your system
+
 To confirm Docker is successfully installed:
+
 ```bash
 docker --version
 ```
+
 should display a line similar to `Docker version 20.10.21, build baeda1f`.
+
 ### 2. (Optional) Install Docker compose
 
 For Linux users, if your [version of Docker](https://docs.docker.com/desktop/install/linux-install/) doesn't come pre-installed with Docker compose, you can install a one-off version (For Linux).
@@ -52,6 +58,7 @@ sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-c
 # Enable execution of the script
 sudo chmod +x /usr/bin/docker-compose
 ```
+
 ### 3. Build the proxy host container
 
 Navigate to the repo directory
@@ -80,9 +87,9 @@ docker run -it -p 80:80 -p 443:443 -p 5222:5222 -p 8080:8080 -p 8443:8443 -p 822
 
 You will see lines ending with `Certificate generation completed.`. The HAProxy is running in the background and will continue to do so until you close this process.
 
-
 ### Check your connection
-To confirm HAProxy is running, visit `http://<host-ip>:8199` where `<host-ip>` is your **public** IP address. You can also use this link to monitor proxy statistics. 
+
+To confirm HAProxy is running, visit `http://<host-ip>:8199` where `<host-ip>` is your **public** IP address. You can also use this link to monitor proxy statistics.
 
 > NOTE: If your public IP address is not accessible, you will need to enable port forwarding (for the ports above) for the router/gateway you are using. Since this operation is device-specific, we are not going to go into it in details in this doc.
 
@@ -105,7 +112,6 @@ on connections. If you have a network load balancer you can preserve the client 
 2. 8443: Standard web traffic, encrypted (HTTPS) with PROXY protocol expected
 3. 8222: Jabber protocol traffic (WhatsApp default) with PROXY protocol expected
 
-
 ## Certificate generation for SSL encrypted ports
 
 Ports 443 and 8443 are protected by a self-signed encryption certificate generated at container start time. There are some custom options should you wish to tweak the settings of the generated certificates
@@ -118,7 +124,6 @@ They can be set with commands like
 ```bash
 docker build . --build-arg SSL_DNS=test.example.com
 ```
-
 
 ## Advanced
 
@@ -178,6 +183,7 @@ If you would like to configure your proxy using Kubernetes, or run the Docker ru
 Read more about other type of deployments [here](/docs/deployments.md).
 
 # Contributors
+
 ------------
 
 The authors of this code are Sean Lawlor ([@slawlor](https://github.com/slawlor)).
@@ -185,6 +191,7 @@ The authors of this code are Sean Lawlor ([@slawlor](https://github.com/slawlor)
 To learn more about contributing to this project, [see this document](https://github.com/whatsapp/proxy/blob/main/CONTRIBUTING.md).
 
 # License
--------
+
+------------
 
 This project is licensed under [MIT](https://github.com/novifinancial/akd/blob/main/LICENSE-MIT).
