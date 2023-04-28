@@ -10,10 +10,10 @@
 replicaCount: 10
 
 image:
-  repository: seanlawlor/whatsapp_proxy
+  repository: facebook/whatsapp_proxy
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "1.0"
+  tag: "latest"
 
 public_ip: "10.0.0.1"
 
@@ -45,6 +45,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
+  annotations: {}
   port: 8080
   # http_port: 80
   # https_port: 443

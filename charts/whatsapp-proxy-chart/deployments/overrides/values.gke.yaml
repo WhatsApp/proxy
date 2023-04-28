@@ -1,0 +1,20 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# License found in the LICENSE file in the root directory
+# of this source tree.
+
+# Values override for whatsapp-proxy-chart for deploying to Google Kubernetes Engine (GKE).
+# Note: This values override file is not part of the core project.
+# Rather, it is provided here as an example override file to help with
+# deployment to Google Kubernetes Engine.
+
+service:
+  type: LoadBalancer
+  annotations:
+    cloud.google.com/l4-rbs: "enabled"
+
+podSecurityContext:
+  sysctls:
+  - name: net.ipv4.ip_unprivileged_port_start
+    value: "0"
+
