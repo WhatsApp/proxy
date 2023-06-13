@@ -17,6 +17,8 @@ services:
       - "8080:8080" # HTTP with accept-proxy processing
       - "8443:8443" # HTTPS with accept-proxy processing
       - "8222:8222" # JABBER with accept-proxy processing
+      - "587:587"   # whatsapp.net
+      - "7777:7777" # whatsapp.net
     healthcheck:
       test: /usr/local/bin/healthcheck.sh
       interval: 10s
