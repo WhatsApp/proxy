@@ -51,6 +51,8 @@ EXPOSE 8443/tcp
 EXPOSE 5222/tcp
 EXPOSE 8222/tcp
 EXPOSE 8199/tcp
+EXPOSE 587/tcp
+EXPOSE 7777/tcp
 
 # This is the startup command which also runs a background job to manage the WAPOX IPs
 CMD /usr/local/bin/set_public_ip_and_start.sh

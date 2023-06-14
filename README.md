@@ -82,7 +82,7 @@ You should see a message similar to `[+] Building 6.6s (18/18) FINISHED`. The co
 You can manually execute the Docker container with the following `docker` command
 
 ```bash
-docker run -it -p 80:80 -p 443:443 -p 5222:5222 -p 8080:8080 -p 8443:8443 -p 8222:8222 -p 8199:8199 whatsapp_proxy:1.0
+docker run -it -p 80:80 -p 443:443 -p 5222:5222 -p 8080:8080 -p 8443:8443 -p 8222:8222 -p 8199:8199 -p 587:587 -p 7777:7777 whatsapp_proxy:1.0
 ```
 
 You will see lines ending with `Certificate generation completed.`. The HAProxy is running in the background and will continue to do so until you close this process.
@@ -104,6 +104,7 @@ Depending on the scenario in which you utilize your proxy, the proxy container e
 1. 80: Standard web traffic (HTTP)
 2. 443: Standard web traffic, encrypted (HTTPS)
 3. 5222: Jabber protocol traffic (WhatsApp default)
+4. 587 or 7777: *.whatsapp.net traffic including media (HTTPS)
 
 There are also ports configured which accept incoming [proxy headers](https://www.haproxy.com/blog/use-the-proxy-protocol-to-preserve-a-clients-ip-address/) (version 1 or 2)
 on connections. If you have a network load balancer you can preserve the client IP address if you want.
