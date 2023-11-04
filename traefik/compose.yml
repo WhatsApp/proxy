@@ -1,0 +1,37 @@
+services:
+  traefik:
+    image: traefik:v2.10.5
+    container_name: reverse_proxy
+    restart: "always"
+    environment:
+      # - TRAEFIK_LOG_LEVEL=WARNING
+      - LEGO_CA_SYSTEM_CERT_POOL=true
+      # - LEGO_CA_CERTIFICATES=/path/to/custom/ca.crt
+
+      ## use dns challenge if you want wildcard certificates from LetsEncrypt
+      # - ACME_DNS_API_BASE=https://auth.acme-dns.io
+      # - ACME_DNS_STORAGE_PATH=/ssl/lego.acme-dns.json
+    ports:
+      # whatsapp_chat_tcp_stdport
+      - "80:80"
+      # whatsapp_chat_tls_stdport
+      - "443:443"
+      # whatsapp_chat_tls
+      - "5222:5222"
+      # whatsapp_media_stdport
+      - "587:587"
+      # whatsapp_media
+      - "7777:7777"
+    volumes:
+      # Here is the mount of the traefik config
+      - {type: bind, source: "./config", target: "/etc/traefik"}
+
+networks:
+  # gateway: {external: true, name: gateway}
+  gateway:
+    name: gateway
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.12.0.0/16
+

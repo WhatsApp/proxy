@@ -1,0 +1,47 @@
+## TLS termination for chat traffic, use letsencrypt or self signed certificate
+[tcp.routers.whatsapp-chat-tls]
+entrypoints = ["whatsapp_chat_tls", "whatsapp_chat_tls_stdport"]
+rule = "HostSNIRegexp(`whatsapp-{ip:.*}.traefik.me`)"
+service = "whatsapp-chat"
+
+[tcp.routers.whatsapp-chat-tls.tls]
+## Option 1 (default): use self-signed certificate
+
+## Option 2: uncomment this line to use LetsEncrypt
+# certResolver = "leprod"
+
+## Option 3: import certificate from file, mounted from ./config/ssl directory
+# [tls.stores]
+#   [tls.stores.default]
+
+# [[tls.certificates]]
+#   certFile = "/etc/traefik/ssl/your_domain.pem"
+#   keyFile = "/etc/traefik/ssl/your_domain.key"
+
+
+[tcp.routers.whatsapp-chat-tcp]
+# this router will occupy the entire 80 port!
+# if you have other plans for 80 port, you can comment it out safely,
+# chat service is served by 443 port, and 80 port is only used as a fallback.
+entrypoints = ["whatsapp_chat_tcp_stdport"]
+rule = "ClientIP(`0.0.0.0/0`)"
+service = "whatsapp-chat"
+
+[tcp.services.whatsapp-chat.loadBalancer]
+[[tcp.services.whatsapp-chat.loadBalancer.servers]]
+  ## port 5222 and 80 can be used interchangeably, 80 port is chosen in case of restrictive networks.
+  address = "g.whatsapp.net:80"
+  # address = "g.whatsapp.net:5222"
+  # address = "port-forwarder:5222"
+
+[tcp.routers.whatsapp-media]
+entrypoints = ["whatsapp_media", "whatsapp_media_stdport"]
+rule = "HostSNIRegexp(`media-[a-z1-9-]+.cdn.whatsapp.net`, `whatsapp-{ip:.*}.traefik.me`)"  # `whatsapp.net`, `mmg.whatsapp.net`,
+service = "whatsapp-media"
+[tcp.routers.whatsapp-media.tls]
+passthrough = true
+
+[tcp.services.whatsapp-media.loadBalancer]
+[[tcp.services.whatsapp-media.loadBalancer.servers]]
+  address = "whatsapp.net:443"
+  # address = "port-forwarder:5443"

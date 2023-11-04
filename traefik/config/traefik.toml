@@ -1,0 +1,44 @@
+[entryPoints]
+  [entryPoints.whatsapp_chat_tcp_stdport]
+    address = ":80"
+  [entryPoints.whatsapp_chat_tls_stdport]
+    address = ":443"
+  [entryPoints.whatsapp_chat_tls]
+    address = ":5222"
+  [entryPoints.whatsapp_media_stdport]
+    address = ":587"
+  [entryPoints.whatsapp_media]
+    address = ":7777"
+
+## uncomment these lines to enable LetsEncrypt
+
+# [certificatesResolvers.leprod.acme]
+#   email = "acme@example.com"
+#   storage = "/etc/traefik/ssl/leprod.json"
+
+#   ## use tls challenge for most cases
+#   [certificatesResolvers.leprod.acme.tlsChallenge]
+
+#   ## use dns challenge if you want wildcard certificates from LetsEncrypt
+#   # [certificatesResolvers.leprod.acme.dnsChallenge]
+#   #   provider = "acme-dns"
+#   #   # delayBeforeCheck = 0
+
+
+
+[providers.file]
+  directory = "/etc/traefik/dynamic/"
+
+[serversTransport]
+  rootCAs = ["/etc/ssl/cert.pem"]  # "/path/to/custom/ca.crt",
+
+[api]
+
+[log]
+  level = "WARNING"
+  # level = "DEBUG"
+
+[accessLog]
+
+# [experimental.localPlugins.fail2ban]
+#   moduleName = "github.com/tomMoulard/fail2ban"
