@@ -177,6 +177,10 @@ docker ps
 
 *\*Make sure to update the path to your specific `docker-compose.yml` file in the service definition `docker_boot.service`*
 
+## Alternative Traefik proxy
+
+For a simpler and more versatile configuration using traefik, see [traefik/README.md](traefik/README.md)
+
 ## Kubernetes deployment
 
 If you would like to configure your proxy using Kubernetes, or run the Docker runtime through Kubernetes, please see our [Helm chart README](./charts/README.md)
