@@ -36,7 +36,7 @@ service = "whatsapp-chat"
 
 [tcp.routers.whatsapp-media]
 entrypoints = ["whatsapp_media", "whatsapp_media_stdport"]
-rule = "HostSNIRegexp(`media-[a-z1-9-]+.cdn.whatsapp.net`, `whatsapp-{ip:.*}.traefik.me`)"  # `whatsapp.net`, `mmg.whatsapp.net`,
+rule = "HostSNIRegexp(`media-[a-z1-9-]+.cdn.whatsapp.net`, `whatsapp-{ip:.*}.traefik.me`) || HostSNI(`mmg.whatsapp.net`)"  # `whatsapp.net`
 service = "whatsapp-media"
 [tcp.routers.whatsapp-media.tls]
 passthrough = true
