@@ -20,7 +20,7 @@ jobs:
         # The :11 strips the first 11 characters from the environment variable GITHUB_REF which contains refs/tags/v1.2.3 so it yields 1.2.3
       - name: Set release version (i.e. tag)
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/v}
+        run: echo "tag=${GITHUB_REF#refs/*/v}" >> $GITHUB_OUTPUT
 
       - name: Print the release version (i.e. tag)
         run: echo "TAG = ${{ steps.vars.outputs.tag }}"
