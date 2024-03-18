@@ -6,7 +6,7 @@
 
 ## About:
 # This script replaces instances of #PUBLIC_IP in the HaProxy configuration files
-# with the the real public ip. There's an order of priority here which is
+# with the real public ip. There's an order of priority here which is
 # 1. Environment variable
 # 2. AWS EC2 Metadata endpoint
 # 3. Third-party sources
