@@ -7,7 +7,7 @@
 curl -s -w 2 "http://127.0.0.1:8199/;csv" > /tmp/stats.txt || exit 1
 
 # First trim off the leading line which is just "#"
-# Then convert the ugly CSV to slightly less ugly JSON
+# Convert the CSV to JSON for easier data manipulation
 # Filter out the lines for *.whatsapp_net backend status
 # Select the "check_desc" field (Description of the check result)
 # and take all results that do NOT equal "Layer4 check passed" from HAProxy
