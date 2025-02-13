@@ -32,8 +32,12 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext:
   # fsGroup: 2000
+  sysctls:
+  - name: net.ipv4.ip_unprivileged_port_start
+    value: "0"
+
 
 securityContext: {}
   # capabilities:
