@@ -49,7 +49,8 @@ securityContext: {}
 
 service:
   type: LoadBalancer
-  annotations: {}
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
   port: 8080
   http_port: 80
   https_port: 443
