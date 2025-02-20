@@ -48,15 +48,18 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  annotations: {}
+  type: LoadBalancer
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
   port: 8080
-  # http_port: 80
-  # https_port: 443
-  # jabber_port: 5222
-  http_proxy_port: 8080
-  https_proxy_port: 8443
-  jabber_proxy_port: 8222
+  http_port: 80
+  https_port: 443
+  jabber_port: 5222
+  media_port: 587
+  # http_proxy_port: 8080
+  # https_proxy_port: 8443
+  # jabber_proxy_port: 8222
+  # media_proxy_port: 7777
   # stats_port: 8199
 
 ingress:

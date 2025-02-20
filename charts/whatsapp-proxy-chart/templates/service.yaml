@@ -54,9 +54,24 @@ spec:
     {{- end}}
     {{- if .Values.service.stats_port }}
     - port: {{ .Values.service.stats_port }}
-      targetPort: {{ .Values.service.stats_port }}
+      targetPort: 8199
       protocol: TCP
       name: stats
     {{- end}}
+    {{- if .Values.service.media_port }}
+    - port: {{ .Values.service.media_port }}
+      targetPort: 587
+      protocol: TCP
+      name: media
+    {{- end}}
+
+    {{- if .Values.service.media_proxy_port }}
+    - port: {{ .Values.service.media_proxy_port }}
+      targetPort: 7777
+      protocol: TCP
+      name: media
+    {{- end}}
+
+
   selector:
     {{- include "whatsapp-proxy-chart.selectorLabels" . | nindent 4 }}
