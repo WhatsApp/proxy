@@ -61,7 +61,7 @@ spec:
     {{- if .Values.service.media_port }}
     - port: {{ .Values.service.media_port }}
       targetPort: 587
-      protocl: TCP
+      protocol: TCP
       name: media
     {{- end}}
 
