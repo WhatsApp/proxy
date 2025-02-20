@@ -1,7 +1,5 @@
 name: Docker Image Build for PRs
 
-# Run on every push to main + weekly, Sunday @ midnight
-# to keep the image fresh
 on:
   pull_request:
     types: [opened, reopened, sychronize]
