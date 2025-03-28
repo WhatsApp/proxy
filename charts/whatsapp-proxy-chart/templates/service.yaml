@@ -64,7 +64,6 @@ spec:
       protocol: TCP
       name: media
     {{- end}}
-
     {{- if .Values.service.media_proxy_port }}
     - port: {{ .Values.service.media_proxy_port }}
       targetPort: 7777

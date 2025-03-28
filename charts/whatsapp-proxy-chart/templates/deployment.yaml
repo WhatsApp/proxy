@@ -68,6 +68,16 @@ spec:
               containerPort: 5222
               protocol: TCP
             {{- end}}
+            {{- if .Values.service.media_port }}
+            - name: media
+              containerPort: 587
+              protocol: TCP
+            {{- end}}
+            {{- if .Values.service.media_proxy_port}}
+            - name: media-proxy
+              containerPort: 7777
+              protocol: TCP
+            {{- end}}
             {{- if .Values.service.stats_port }}
             - name: stats
               containerPort: 8199
