@@ -102,3 +102,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Enables service monitor for the prometheus operator.
+enableServiceMonitor: false
+prometheus:
+  release: my-prometheus-release
