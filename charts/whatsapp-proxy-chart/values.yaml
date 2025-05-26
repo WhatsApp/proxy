@@ -15,8 +15,6 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
-public_ip: "10.0.0.1"
-
 imagePullSecrets: {}
 nameOverride: ""
 fullnameOverride: ""
