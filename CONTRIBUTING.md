@@ -1,4 +1,4 @@
-<!-- Copyright (c) Meta Platforms, Inc. and affiliates.
+docker pull facebook/whatsapp_proxy:latest<!-- Copyright (c) Meta Platforms, Inc. and affiliates.
 
 License found in the LICENSE file in the root directory
 of this source tree. -->
