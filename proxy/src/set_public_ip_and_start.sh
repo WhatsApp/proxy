@@ -15,7 +15,7 @@
 CONFIG_FILE="/usr/local/etc/haproxy/haproxy.cfg"
 
 ## Custom function to use as curl wrapper
-# --silent: to reduce the nois eof response
+# --silent: to reduce the noise of response
 # --show-error: to show errors in the response
 # --fail: to fail on non-200 responses
 # --ipv4: to force ipv4 resolution
@@ -69,16 +69,37 @@ then
     # haproxy configuration statement for the frontend which set's the destination
     # ip to the public ip of the container (which is necessary to determine our IP's
     # internally within WA)
-    sed -i "s/#PUBLIC\_IP/tcp-request connection set-dst ipv4($PUBLIC_IP)/g" $CONFIG_FILE
+    sed -i "s/#PUBLIC\_IP/tcp-request connection set-dst ipv4($PUBLIC_IP)/g" $CONFIG_FILE || {
+        echo "[PROXYHOST] ERROR: Failed to update HAProxy configuration with public IP" >&2
+        exit 1
+    }
 fi
 
 # Setup a new, on-the-fly certificate for the HTTPS port (so this re-generates each restart)
-pushd /home/haproxy/certs
-/usr/local/bin/generate-certs.sh
-mv proxy.whatsapp.net.pem /etc/haproxy/ssl/proxy.whatsapp.net.pem
-chown haproxy:haproxy /etc/haproxy/ssl/proxy.whatsapp.net.pem
+pushd /home/haproxy/certs || {
+    echo "[PROXYHOST] ERROR: Failed to change to /home/haproxy/certs directory" >&2
+    exit 1
+}
+/usr/local/bin/generate-certs.sh || {
+    echo "[PROXYHOST] ERROR: Certificate generation failed" >&2
+    popd
+    exit 1
+}
+mv proxy.whatsapp.net.pem /etc/haproxy/ssl/proxy.whatsapp.net.pem || {
+    echo "[PROXYHOST] ERROR: Failed to move certificate to /etc/haproxy/ssl/" >&2
+    popd
+    exit 1
+}
+chown haproxy:haproxy /etc/haproxy/ssl/proxy.whatsapp.net.pem || {
+    echo "[PROXYHOST] ERROR: Failed to set certificate ownership" >&2
+    popd
+    exit 1
+}
 popd
 
 # Start HAProxy
-haproxy -f "$CONFIG_FILE"
+haproxy -f "$CONFIG_FILE" || {
+    echo "[PROXYHOST] ERROR: HAProxy failed to start" >&2
+    exit 1
+}
 
