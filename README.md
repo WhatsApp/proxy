@@ -113,6 +113,23 @@ on connections. If you have a network load balancer you can preserve the client 
 2. 8443: Standard web traffic, encrypted (HTTPS) with PROXY protocol expected
 3. 8222: Jabber protocol traffic (WhatsApp default) with PROXY protocol expected
 
+## Adverse network conditions
+
+The proxy container exposes many ports for different functionality.
+When deploying the container to work around adverse network conditions,
+this flexibility may actually be undesirable,
+since a proxy instance may be uniquely identified by some of the non-standard ports.
+
+To provide basic functionality (messages and media),
+we recommend exposing only ports 443 and 587 on the proxy endpoint.
+
+This is required **only if exposing the proxy on a public IP address**,
+and not needed for users connecting to the proxy through a VPN or a private connection.
+
+> Note: When using the proxy enabled HTTPS port (8443),
+> make sure port 8443 is exposed publicly as port 443,
+> to ensure WhatsApp clients can connect to port 443.
+
 ## Certificate generation for SSL encrypted ports
 
 Ports 443 and 8443 are protected by a self-signed encryption certificate generated at container start time. There are some custom options should you wish to tweak the settings of the generated certificates
