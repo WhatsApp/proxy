@@ -6,7 +6,7 @@ version: '3.3'
 
 services:
   proxy:
-    container_name: whatsapp_proxy
+container_name: whatsapp_proxy
     build: ../
     restart: unless-stopped
     ports:
