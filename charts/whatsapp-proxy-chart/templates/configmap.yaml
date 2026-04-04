@@ -1,0 +1,13 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# License found in the LICENSE file in the root directory
+# of this source tree.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "whatsapp-proxy-chart.fullname" . }}-haproxy
+  labels:
+    {{- include "whatsapp-proxy-chart.labels" . | nindent 4 }}
+data:
+  haproxy.cfg: |
+    {{- .Values.haproxyConfig | nindent 4 }}

@@ -17,10 +17,11 @@ spec:
       {{- include "whatsapp-proxy-chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/haproxy-config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "whatsapp-proxy-chart.selectorLabels" . | nindent 8 }}
     spec:
@@ -94,6 +95,15 @@ spec:
           env:
             - name: "PUBLIC_IP"
               value: "{{ .Values.public_ip }}"
+          volumeMounts:
+            - name: haproxy-config
+              mountPath: /usr/local/etc/haproxy/haproxy.cfg
+              subPath: haproxy.cfg
+              readOnly: true
+      volumes:
+        - name: haproxy-config
+          configMap:
+            name: {{ include "whatsapp-proxy-chart.fullname" . }}-haproxy
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

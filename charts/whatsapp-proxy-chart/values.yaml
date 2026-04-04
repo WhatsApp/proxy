@@ -102,3 +102,75 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# HAProxy configuration file contents.
+# Edit this to customize proxy behavior without rebuilding the image.
+haproxyConfig: |
+  global
+    tune.bufsize 4096
+    maxconn 27500
+    spread-checks 5
+    ssl-server-verify none
+
+  defaults
+    mode tcp
+    timeout client-fin 1s
+    timeout server-fin 1s
+    timeout connect 5s
+    timeout client 200s
+    timeout server 200s
+    default-server inter 10s fastinter 1s downinter 3s error-limit 50
+
+  listen stats
+    bind :::8199
+    mode http
+    http-request use-service prometheus-exporter if { path /metrics }
+    stats uri /
+
+  frontend haproxy_v4_http
+    maxconn 27495
+    #PUBLIC_IP
+
+    bind ipv4@*:80
+    bind ipv4@*:8080 accept-proxy
+
+    default_backend wa_http
+
+  frontend haproxy_v4_https
+    maxconn 27495
+    #PUBLIC_IP
+
+    bind ipv4@*:443 ssl crt /etc/haproxy/ssl/proxy.whatsapp.net.pem
+    bind ipv4@*:8443 ssl crt /etc/haproxy/ssl/proxy.whatsapp.net.pem accept-proxy
+
+    default_backend wa
+
+  frontend haproxy_v4_xmpp
+    maxconn 27495
+    #PUBLIC_IP
+
+    bind ipv4@*:5222
+    bind ipv4@*:8222 accept-proxy
+
+    default_backend wa
+
+  frontend haproxy_v4_whatsapp_net
+    maxconn 27495
+    #PUBLIC_IP
+
+    bind ipv4@*:587
+    bind ipv4@*:7777
+
+    default_backend wa_whatsapp_net
+
+  backend wa_whatsapp_net
+    default-server check inter 60000 observe layer4
+    server whatsapp_net_443 whatsapp.net:443
+
+  backend wa
+    default-server check inter 60000 observe layer4 send-proxy
+    server g_whatsapp_net_5222 g.whatsapp.net:5222
+
+  backend wa_http
+    default-server check inter 60000 observe layer4 send-proxy
+    server g_whatsapp_net_80 g.whatsapp.net:80
