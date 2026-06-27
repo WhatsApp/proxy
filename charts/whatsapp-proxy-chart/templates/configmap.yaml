@@ -10,4 +10,4 @@ metadata:
     {{- include "whatsapp-proxy-chart.labels" . | nindent 4 }}
 data:
   haproxy.cfg: |
-    {{- .Values.haproxyConfig | nindent 4 }}
+    {{- tpl .Values.haproxyConfig . | nindent 4 }}
