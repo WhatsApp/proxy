@@ -15,6 +15,9 @@ metadata:
 
 spec:
   type: {{ .Values.service.type }}
+  {{- with .Values.service.loadBalancerClass }}
+  loadBalancerClass: {{ . | quote }}
+  {{- end }}
   ports:
     {{- if .Values.service.http_proxy_port }}
     - port: {{ .Values.service.http_proxy_port }}
