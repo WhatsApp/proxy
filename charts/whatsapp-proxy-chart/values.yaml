@@ -103,74 +103,132 @@ tolerations: []
 
 affinity: {}
 
-# HAProxy configuration file contents.
-# Edit this to customize proxy behavior without rebuilding the image.
+# HAProxy tunables. These are interpolated into haproxyConfig below via `tpl`,
+# so individual values (e.g. maxconn) can be overridden per-deployment without
+# replacing the entire config blob.
+haproxy:
+  global:
+    tuneBufsize: 4096
+    maxconn: 27500
+    spreadChecks: 5
+    sslServerVerify: none
+  defaults:
+    mode: tcp
+    timeoutClientFin: 1s
+    timeoutServerFin: 1s
+    timeoutConnect: 5s
+    timeoutClient: 200s
+    timeoutServer: 200s
+    defaultServer: inter 10s fastinter 1s downinter 3s error-limit 50
+  stats:
+    bind: ":::8199"
+    mode: http
+    metricsPath: /metrics
+    uri: /
+  frontends:
+    haproxyV4Http:
+      maxconn: 27495
+      directBind: ipv4@*:80
+      proxyBind: ipv4@*:8080 accept-proxy
+      defaultBackend: wa_http
+    haproxyV4Https:
+      maxconn: 27495
+      directBind: ipv4@*:443 ssl crt /etc/haproxy/ssl/proxy.whatsapp.net.pem
+      proxyBind: ipv4@*:8443 ssl crt /etc/haproxy/ssl/proxy.whatsapp.net.pem accept-proxy
+      defaultBackend: wa
+    haproxyV4Xmpp:
+      maxconn: 27495
+      directBind: ipv4@*:5222
+      proxyBind: ipv4@*:8222 accept-proxy
+      defaultBackend: wa
+    haproxyV4WhatsappNet:
+      maxconn: 27495
+      directBind: ipv4@*:587
+      proxyBind: ipv4@*:7777
+      defaultBackend: wa_whatsapp_net
+  backends:
+    waWhatsappNet:
+      defaultServer: check inter 60000 observe layer4
+      serverName: whatsapp_net_443
+      serverAddress: whatsapp.net:443
+    wa:
+      defaultServer: check inter 60000 observe layer4 send-proxy
+      serverName: g_whatsapp_net_5222
+      serverAddress: g.whatsapp.net:5222
+    waHttp:
+      defaultServer: check inter 60000 observe layer4 send-proxy
+      serverName: g_whatsapp_net_80
+      serverAddress: g.whatsapp.net:80
+
+# HAProxy configuration file contents, rendered through `tpl` so the values
+# under `haproxy:` above are interpolated. Edit haproxy.* values (or override
+# them per-deployment) to customize proxy behavior without rebuilding the image.
 haproxyConfig: |
   global
-    tune.bufsize 4096
-    maxconn 27500
-    spread-checks 5
-    ssl-server-verify none
+    tune.bufsize {{ .Values.haproxy.global.tuneBufsize }}
+    maxconn {{ .Values.haproxy.global.maxconn }}
+    spread-checks {{ .Values.haproxy.global.spreadChecks }}
+    ssl-server-verify {{ .Values.haproxy.global.sslServerVerify }}
 
   defaults
-    mode tcp
-    timeout client-fin 1s
-    timeout server-fin 1s
-    timeout connect 5s
-    timeout client 200s
-    timeout server 200s
-    default-server inter 10s fastinter 1s downinter 3s error-limit 50
+    mode {{ .Values.haproxy.defaults.mode }}
+    timeout client-fin {{ .Values.haproxy.defaults.timeoutClientFin }}
+    timeout server-fin {{ .Values.haproxy.defaults.timeoutServerFin }}
+    timeout connect {{ .Values.haproxy.defaults.timeoutConnect }}
+    timeout client {{ .Values.haproxy.defaults.timeoutClient }}
+    timeout server {{ .Values.haproxy.defaults.timeoutServer }}
+    default-server {{ .Values.haproxy.defaults.defaultServer }}
 
   listen stats
-    bind :::8199
-    mode http
-    http-request use-service prometheus-exporter if { path /metrics }
-    stats uri /
+    bind {{ .Values.haproxy.stats.bind }}
+    mode {{ .Values.haproxy.stats.mode }}
+    http-request use-service prometheus-exporter if { path {{ .Values.haproxy.stats.metricsPath }} }
+    stats uri {{ .Values.haproxy.stats.uri }}
 
   frontend haproxy_v4_http
-    maxconn 27495
+    maxconn {{ .Values.haproxy.frontends.haproxyV4Http.maxconn }}
     #PUBLIC_IP
 
-    bind ipv4@*:80
-    bind ipv4@*:8080 accept-proxy
+    bind {{ .Values.haproxy.frontends.haproxyV4Http.directBind }}
+    bind {{ .Values.haproxy.frontends.haproxyV4Http.proxyBind }}
 
-    default_backend wa_http
+    default_backend {{ .Values.haproxy.frontends.haproxyV4Http.defaultBackend }}
 
   frontend haproxy_v4_https
-    maxconn 27495
+    maxconn {{ .Values.haproxy.frontends.haproxyV4Https.maxconn }}
     #PUBLIC_IP
 
-    bind ipv4@*:443 ssl crt /etc/haproxy/ssl/proxy.whatsapp.net.pem
-    bind ipv4@*:8443 ssl crt /etc/haproxy/ssl/proxy.whatsapp.net.pem accept-proxy
+    bind {{ .Values.haproxy.frontends.haproxyV4Https.directBind }}
+    bind {{ .Values.haproxy.frontends.haproxyV4Https.proxyBind }}
 
-    default_backend wa
+    default_backend {{ .Values.haproxy.frontends.haproxyV4Https.defaultBackend }}
 
   frontend haproxy_v4_xmpp
-    maxconn 27495
+    maxconn {{ .Values.haproxy.frontends.haproxyV4Xmpp.maxconn }}
     #PUBLIC_IP
 
-    bind ipv4@*:5222
-    bind ipv4@*:8222 accept-proxy
+    bind {{ .Values.haproxy.frontends.haproxyV4Xmpp.directBind }}
+    bind {{ .Values.haproxy.frontends.haproxyV4Xmpp.proxyBind }}
 
-    default_backend wa
+    default_backend {{ .Values.haproxy.frontends.haproxyV4Xmpp.defaultBackend }}
 
   frontend haproxy_v4_whatsapp_net
-    maxconn 27495
+    maxconn {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.maxconn }}
     #PUBLIC_IP
 
-    bind ipv4@*:587
-    bind ipv4@*:7777
+    bind {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.directBind }}
+    bind {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.proxyBind }}
 
-    default_backend wa_whatsapp_net
+    default_backend {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.defaultBackend }}
 
   backend wa_whatsapp_net
-    default-server check inter 60000 observe layer4
-    server whatsapp_net_443 whatsapp.net:443
+    default-server {{ .Values.haproxy.backends.waWhatsappNet.defaultServer }}
+    server {{ .Values.haproxy.backends.waWhatsappNet.serverName }} {{ .Values.haproxy.backends.waWhatsappNet.serverAddress }}
 
   backend wa
-    default-server check inter 60000 observe layer4 send-proxy
-    server g_whatsapp_net_5222 g.whatsapp.net:5222
+    default-server {{ .Values.haproxy.backends.wa.defaultServer }}
+    server {{ .Values.haproxy.backends.wa.serverName }} {{ .Values.haproxy.backends.wa.serverAddress }}
 
   backend wa_http
-    default-server check inter 60000 observe layer4 send-proxy
-    server g_whatsapp_net_80 g.whatsapp.net:80
+    default-server {{ .Values.haproxy.backends.waHttp.defaultServer }}
+    server {{ .Values.haproxy.backends.waHttp.serverName }} {{ .Values.haproxy.backends.waHttp.serverAddress }}
