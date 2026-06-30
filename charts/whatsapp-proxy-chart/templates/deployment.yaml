@@ -32,6 +32,29 @@ spec:
       serviceAccountName: {{ include "whatsapp-proxy-chart.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        # The container entrypoint substitutes #PUBLIC_IP -> `set-dst` in
+        # /usr/local/etc/haproxy/haproxy.cfg in place. A ConfigMap volume is
+        # always mounted read-only by the kubelet (the readOnly flag can't
+        # change that), which makes that in-place edit fail and leaves HAProxy
+        # advertising the pod's private IP. So seed a writable emptyDir with the
+        # image defaults (e.g. errors/) and overlay the ConfigMap haproxy.cfg.
+        - name: haproxy-config-init
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              cp -a /usr/local/etc/haproxy/. /haproxy-runtime/
+              cp /haproxy-config-src/haproxy.cfg /haproxy-runtime/haproxy.cfg
+          volumeMounts:
+            - name: haproxy-config-src
+              mountPath: /haproxy-config-src
+              readOnly: true
+            - name: haproxy-config
+              mountPath: /haproxy-runtime
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -96,14 +119,17 @@ spec:
             - name: "PUBLIC_IP"
               value: "{{ .Values.public_ip }}"
           volumeMounts:
+            # Writable copy of the config dir (populated by the initContainer)
+            # so the entrypoint can edit haproxy.cfg in place, while keeping it
+            # at its canonical /usr/local/etc/haproxy/haproxy.cfg location.
             - name: haproxy-config
-              mountPath: /usr/local/etc/haproxy/haproxy.cfg
-              subPath: haproxy.cfg
-              readOnly: true
+              mountPath: /usr/local/etc/haproxy
       volumes:
-        - name: haproxy-config
+        - name: haproxy-config-src
           configMap:
             name: {{ include "whatsapp-proxy-chart.fullname" . }}-haproxy
+        - name: haproxy-config
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
