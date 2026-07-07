@@ -103,6 +103,13 @@ tolerations: []
 
 affinity: {}
 
+# Extra volumes to attach to the pod, rendered as-is into the Deployment's
+# spec.template.spec.volumes
+extraVolumes: []
+
+# Extra volumeMounts for the HAProxy container.
+extraVolumeMounts: []
+
 # HAProxy tunables. These are interpolated into haproxyConfig below via `tpl`,
 # so individual values (e.g. maxconn) can be overridden per-deployment without
 # replacing the entire config blob.
