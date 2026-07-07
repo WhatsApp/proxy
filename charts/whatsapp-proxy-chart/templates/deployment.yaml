@@ -124,12 +124,18 @@ spec:
             # at its canonical /usr/local/etc/haproxy/haproxy.cfg location.
             - name: haproxy-config
               mountPath: /usr/local/etc/haproxy
+            {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
       volumes:
         - name: haproxy-config-src
           configMap:
             name: {{ include "whatsapp-proxy-chart.fullname" . }}-haproxy
         - name: haproxy-config
           emptyDir: {}
+        {{- with .Values.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
