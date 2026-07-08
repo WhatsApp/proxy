@@ -3,6 +3,20 @@ entries:
   whatsapp-proxy-chart:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2026-07-08T00:07:45.855764375Z"
+    description: A Helm chart for Kubernetes for the WhatsApp Proxy infrastructure
+    digest: b78ed55a0ca229fb254f2bfe2476e289a91160d6984e8405e35c2badedab4fe9
+    icon: https://github.com/whatsapp/proxy/blob/main/helm/wa_logo.svc
+    maintainers:
+    - email: seanlawlor@meta.com
+      name: slawlor
+    name: whatsapp-proxy-chart
+    type: application
+    urls:
+    - https://github.com/WhatsApp/proxy/releases/download/whatsapp-proxy-chart-1.3.5/whatsapp-proxy-chart-1.3.5.tgz
+    version: 1.3.5
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2026-07-07T23:54:59.355458006Z"
     description: A Helm chart for Kubernetes for the WhatsApp Proxy infrastructure
     digest: 894f330271d3691243788559892c56883cc62861999b15f372209ab0dec00362
@@ -113,4 +127,4 @@ entries:
     urls:
     - https://github.com/WhatsApp/proxy/releases/download/whatsapp-proxy-chart-1.0.3/whatsapp-proxy-chart-1.0.3.tgz
     version: 1.0.3
-generated: "2026-07-07T23:54:59.355484405Z"
+generated: "2026-07-08T00:07:45.855793188Z"
