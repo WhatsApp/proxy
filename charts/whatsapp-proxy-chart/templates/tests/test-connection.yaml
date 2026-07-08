@@ -6,10 +6,12 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: "{{ include "whatsapp-proxy-chart.fullname" . }}-test-connection"
-  labels:
-    {{- include "whatsapp-proxy-chart.labels" . | nindent 4 }}
+  # Intentionally omit common/selector labels so this pod is not matched by the
+  # HPA's selector. This test pod has no resource requests, and including it
+  # would break the HPA's utilization calculation.
   annotations:
     "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   containers:
     - name: wget
