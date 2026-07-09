@@ -1,0 +1,24 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# License found in the LICENSE file in the root directory
+# of this source tree.
+{{- if .Values.enableServiceMonitor }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "whatsapp-proxy-chart.fullname" . }}-servicemonitor
+  namespace: default
+  labels:
+    release: {{ .Values.prometheus.release }}
+spec:
+  endpoints:
+  - interval: 30s
+    path: /metrics
+    port: stats
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
+    matchLabels:
+      {{- include "whatsapp-proxy-chart.selectorLabels" . | nindent 6 }}
+{{- end }}
