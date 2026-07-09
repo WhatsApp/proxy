@@ -110,6 +110,10 @@ extraVolumes: []
 # Extra volumeMounts for the HAProxy container.
 extraVolumeMounts: []
 
+enableServiceMonitor: false
+prometheus:
+  release: my-prometheus-release
+
 # HAProxy tunables. These are interpolated into haproxyConfig below via `tpl`,
 # so individual values (e.g. maxconn) can be overridden per-deployment without
 # replacing the entire config blob.
