@@ -142,7 +142,7 @@ haproxy:
       maxconn: 27495
       directBind: ipv4@*:80
       proxyBind: ipv4@*:8080 accept-proxy
-      defaultBackend: wa_http
+      defaultBackend: wa
     haproxyV4Https:
       maxconn: 27495
       directBind: ipv4@*:443 ssl crt /etc/haproxy/ssl/proxy.whatsapp.net.pem
@@ -165,12 +165,19 @@ haproxy:
       serverAddress: whatsapp.net:443
     wa:
       defaultServer: check inter 60000 observe layer4 send-proxy
-      serverName: g_whatsapp_net_5222
-      serverAddress: g.whatsapp.net:5222
-    waHttp:
-      defaultServer: check inter 60000 observe layer4 send-proxy
-      serverName: g_whatsapp_net_80
-      serverAddress: g.whatsapp.net:80
+      servers:
+        - name: g_whatsapp_net_5222
+          address: g.whatsapp.net:5222
+        - name: g_whatsapp_net_80
+          address: g.whatsapp.net:80
+        - name: g_whatsapp_net_443
+          address: g.whatsapp.net:443
+        - name: g_fallback_whatsapp_net_5222
+          address: g-fallback.whatsapp.net:5222
+        - name: g_fallback_whatsapp_net_80
+          address: g-fallback.whatsapp.net:80
+        - name: g_fallback_whatsapp_net_443
+          address: g-fallback.whatsapp.net:443
 
 # HAProxy configuration file contents, rendered through `tpl` so the values
 # under `haproxy:` above are interpolated. Edit haproxy.* values (or override
@@ -239,8 +246,6 @@ haproxyConfig: |
 
   backend wa
     default-server {{ .Values.haproxy.backends.wa.defaultServer }}
-    server {{ .Values.haproxy.backends.wa.serverName }} {{ .Values.haproxy.backends.wa.serverAddress }}
-
-  backend wa_http
-    default-server {{ .Values.haproxy.backends.waHttp.defaultServer }}
-    server {{ .Values.haproxy.backends.waHttp.serverName }} {{ .Values.haproxy.backends.waHttp.serverAddress }}
+    {{- range .Values.haproxy.backends.wa.servers }}
+    server {{ .name }} {{ .address }}
+    {{- end }}
