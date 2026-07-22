@@ -111,6 +111,10 @@ extraVolumes: []
 # Extra volumeMounts for the HAProxy container.
 extraVolumeMounts: []
 
+# Extra environment variables for the HAProxy container. This can be used to
+# inject secrets with valueFrom.secretKeyRef without putting them in values.
+extraEnv: []
+
 enableServiceMonitor: false
 prometheus:
   release: my-prometheus-release
@@ -142,21 +146,25 @@ haproxy:
       maxconn: 27495
       directBind: ipv4@*:80
       proxyBind: ipv4@*:8080 accept-proxy
+      config: []
       defaultBackend: wa
     haproxyV4Https:
       maxconn: 27495
       directBind: ipv4@*:443 ssl crt /etc/haproxy/ssl/proxy.whatsapp.net.pem
       proxyBind: ipv4@*:8443 ssl crt /etc/haproxy/ssl/proxy.whatsapp.net.pem accept-proxy
+      config: []
       defaultBackend: wa
     haproxyV4Xmpp:
       maxconn: 27495
       directBind: ipv4@*:5222
       proxyBind: ipv4@*:8222 accept-proxy
+      config: []
       defaultBackend: wa
     haproxyV4WhatsappNet:
       maxconn: 27495
       directBind: ipv4@*:587
       proxyBind: ipv4@*:7777
+      config: []
       defaultBackend: wa_whatsapp_net
   backends:
     waWhatsappNet:
@@ -210,6 +218,9 @@ haproxyConfig: |
 
     bind {{ .Values.haproxy.frontends.haproxyV4Http.directBind }}
     bind {{ .Values.haproxy.frontends.haproxyV4Http.proxyBind }}
+    {{- range .Values.haproxy.frontends.haproxyV4Http.config }}
+    {{ . }}
+    {{- end }}
 
     default_backend {{ .Values.haproxy.frontends.haproxyV4Http.defaultBackend }}
 
@@ -219,6 +230,9 @@ haproxyConfig: |
 
     bind {{ .Values.haproxy.frontends.haproxyV4Https.directBind }}
     bind {{ .Values.haproxy.frontends.haproxyV4Https.proxyBind }}
+    {{- range .Values.haproxy.frontends.haproxyV4Https.config }}
+    {{ . }}
+    {{- end }}
 
     default_backend {{ .Values.haproxy.frontends.haproxyV4Https.defaultBackend }}
 
@@ -228,6 +242,9 @@ haproxyConfig: |
 
     bind {{ .Values.haproxy.frontends.haproxyV4Xmpp.directBind }}
     bind {{ .Values.haproxy.frontends.haproxyV4Xmpp.proxyBind }}
+    {{- range .Values.haproxy.frontends.haproxyV4Xmpp.config }}
+    {{ . }}
+    {{- end }}
 
     default_backend {{ .Values.haproxy.frontends.haproxyV4Xmpp.defaultBackend }}
 
@@ -237,6 +254,9 @@ haproxyConfig: |
 
     bind {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.directBind }}
     bind {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.proxyBind }}
+    {{- range .Values.haproxy.frontends.haproxyV4WhatsappNet.config }}
+    {{ . }}
+    {{- end }}
 
     default_backend {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.defaultBackend }}
 

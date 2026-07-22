@@ -118,6 +118,9 @@ spec:
           env:
             - name: "PUBLIC_IP"
               value: "{{ .Values.public_ip }}"
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           volumeMounts:
             # Writable copy of the config dir (populated by the initContainer)
             # so the entrypoint can edit haproxy.cfg in place, while keeping it
