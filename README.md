@@ -95,7 +95,7 @@ To confirm HAProxy is running, visit `http://<host-ip>:8199` where `<host-ip>` i
 
 If you prefer OpenMetrics output you can use `http://<host-ip>:8199/metrics` for monitoring HAProxy metrics.
 
-# Miscellanous
+# Miscellaneous
 
 ## An Overview of the WhatsApp Proxy Architecture
 

@@ -19,8 +19,8 @@ RESULT=$(tail -n +1 /tmp/stats.txt | jq -R 'split(",")' | jq -c 'select(.[1] != 
 if [ "$RESULT" != "" ]
 then
   echo "[HEALTHCHECKER] Container failed healthchecks, L4 healthcheck on *.whatsapp.net failed"
-  echo "[HEALTKCHECKER] Result $RESULT"
-  exit -1;
+  echo "[HEALTHCHECKER] Result $RESULT"
+  exit 1
 fi
 
 exit 0;
