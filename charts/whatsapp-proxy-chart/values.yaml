@@ -172,7 +172,7 @@ haproxy:
       serverName: whatsapp_net_443
       serverAddress: whatsapp.net:443
     wa:
-      defaultServer: check inter 60000 observe layer4 send-proxy
+      defaultServer: check inter 60000 observe layer4 send-proxy-v2
       servers:
         - name: g_whatsapp_net_5222
           address: g.whatsapp.net:5222
