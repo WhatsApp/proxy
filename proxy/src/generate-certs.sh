@@ -36,7 +36,7 @@ if [[ -e ./${CA_KEY} ]]; then
     echo "====> Using existing CA Key ${CA_KEY}"
 else
     echo "====> Generating new CA key ${CA_KEY}"
-    openssl genrsa -out ${CA_KEY} 4096
+    openssl genrsa -out ${CA_KEY} 4096 || exit 1
 fi
 
 if [[ -e ./${CA_CERT} ]]; then
@@ -59,24 +59,32 @@ basicConstraints = CA:FALSE
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 extendedKeyUsage = clientAuth, serverAuth
 EOM
+if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to create SSL config file ${SSL_CONFIG}" >&2
+    exit 1
+fi
 
 if [[ -n ${SSL_DNS} || -n ${SSL_IP} ]]; then
     cat >> ${SSL_CONFIG} <<EOM
 subjectAltName = @alt_names
 [alt_names]
 EOM
+    if [ $? -ne 0 ]; then
+        echo "ERROR: Failed to append to SSL config file ${SSL_CONFIG}" >&2
+        exit 1
+    fi
 
     IFS=","
     dns=(${SSL_DNS})
     dns+=(${SSL_SUBJECT})
     for i in "${!dns[@]}"; do
-      echo DNS.$((i+1)) = ${dns[$i]} >> ${SSL_CONFIG}
+      echo DNS.$((i+1)) = ${dns[$i]} >> ${SSL_CONFIG} || exit 1
     done
 
     if [[ -n ${SSL_IP} ]]; then
         ip=(${SSL_IP})
         for i in "${!ip[@]}"; do
-          echo IP.$((i+1)) = ${ip[$i]} >> ${SSL_CONFIG}
+          echo IP.$((i+1)) = ${ip[$i]} >> ${SSL_CONFIG} || exit 1
         done
     fi
 fi
@@ -92,8 +100,8 @@ openssl x509 -req -in ${SSL_CSR} -CA ${CA_CERT} -CAkey ${CA_KEY} -CAcreateserial
     -days ${SSL_EXPIRE} -extensions v3_req -extfile ${SSL_CONFIG}  || exit 1
 
 echo "====> Generating SSL CERT / KEY COMBO proxy.whatsapp.net.pem"
-cat ${SSL_KEY} > proxy.whatsapp.net.pem
-cat ${SSL_CERT} >> proxy.whatsapp.net.pem
+cat ${SSL_KEY} > proxy.whatsapp.net.pem || exit 1
+cat ${SSL_CERT} >> proxy.whatsapp.net.pem || exit 1
 
 echo "Certificate generation completed."
 
