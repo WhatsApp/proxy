@@ -23,5 +23,3 @@ services:
       test: /usr/local/bin/healthcheck.sh
       interval: 10s
       start_period: 5s
-    environment:
-      - PUBLIC_IP=10.0.0.1
