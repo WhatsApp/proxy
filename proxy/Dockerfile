@@ -22,9 +22,9 @@ RUN chmod +x /usr/local/bin/generate-certs.sh && \
     chown -R haproxy:haproxy /etc/haproxy/
 WORKDIR /
 
-# Copy the public-ip setting + sshd startup script
-COPY --chown=haproxy:haproxy src/set_public_ip_and_start.sh /usr/local/bin/set_public_ip_and_start.sh
-RUN chmod +x /usr/local/bin/set_public_ip_and_start.sh
+# Copy the startup script
+COPY --chown=haproxy:haproxy src/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 # Copy the HAProxy configuration
 COPY --chown=haproxy:haproxy src/proxy_config.cfg /usr/local/etc/haproxy/haproxy.cfg
@@ -54,5 +54,5 @@ EXPOSE 8199/tcp
 EXPOSE 587/tcp
 EXPOSE 7777/tcp
 
-# This is the startup command which also runs a background job to manage the WAPOX IPs
-CMD /usr/local/bin/set_public_ip_and_start.sh
+# Generate a runtime certificate and start HAProxy
+CMD ["/usr/local/bin/start.sh"]
