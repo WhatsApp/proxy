@@ -15,8 +15,6 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
-public_ip: "10.0.0.1"
-
 imagePullSecrets: {}
 nameOverride: ""
 fullnameOverride: ""
@@ -214,7 +212,6 @@ haproxyConfig: |
 
   frontend haproxy_v4_http
     maxconn {{ .Values.haproxy.frontends.haproxyV4Http.maxconn }}
-    #PUBLIC_IP
 
     bind {{ .Values.haproxy.frontends.haproxyV4Http.directBind }}
     bind {{ .Values.haproxy.frontends.haproxyV4Http.proxyBind }}
@@ -226,7 +223,6 @@ haproxyConfig: |
 
   frontend haproxy_v4_https
     maxconn {{ .Values.haproxy.frontends.haproxyV4Https.maxconn }}
-    #PUBLIC_IP
 
     bind {{ .Values.haproxy.frontends.haproxyV4Https.directBind }}
     bind {{ .Values.haproxy.frontends.haproxyV4Https.proxyBind }}
@@ -238,7 +234,6 @@ haproxyConfig: |
 
   frontend haproxy_v4_xmpp
     maxconn {{ .Values.haproxy.frontends.haproxyV4Xmpp.maxconn }}
-    #PUBLIC_IP
 
     bind {{ .Values.haproxy.frontends.haproxyV4Xmpp.directBind }}
     bind {{ .Values.haproxy.frontends.haproxyV4Xmpp.proxyBind }}
@@ -250,7 +245,6 @@ haproxyConfig: |
 
   frontend haproxy_v4_whatsapp_net
     maxconn {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.maxconn }}
-    #PUBLIC_IP
 
     bind {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.directBind }}
     bind {{ .Values.haproxy.frontends.haproxyV4WhatsappNet.proxyBind }}
