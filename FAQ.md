@@ -10,7 +10,7 @@ git clone https://github.com/WhatsApp/proxy.git
 
 ## Common issues
 
-### (1) The container won't build on Windows with `set_public_ip_and_start.sh: Not found`
+### (1) The container won't build on Windows with `start.sh: Not found`
 
 This is likely a line encoding issue since the application is expecting unix-style line
 encoding (EOL not CRLF). This resolved in PR [72](https://github.com/WhatsApp/proxy/pull/72)
