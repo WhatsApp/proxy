@@ -160,7 +160,7 @@ haproxy:
     haproxyV4WhatsappNet:
       maxconn: 27495
       directBind: ipv4@*:587
-      proxyBind: ipv4@*:7777
+      proxyBind: ipv4@*:7777 accept-proxy
       config: []
       defaultBackend: wa_whatsapp_net
   backends:
