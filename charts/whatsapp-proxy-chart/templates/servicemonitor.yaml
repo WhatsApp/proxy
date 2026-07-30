@@ -7,18 +7,15 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "whatsapp-proxy-chart.fullname" . }}-servicemonitor
-  namespace: default
   labels:
     release: {{ .Values.prometheus.release }}
 spec:
   endpoints:
-  - interval: 30s
-    path: /metrics
-    port: stats
-  namespaceSelector:
-    matchNames:
-    - default
+    - interval: 30s
+      path: /metrics
+      port: stats
   selector:
     matchLabels:
+      app.kubernetes.io/component: metrics
       {{- include "whatsapp-proxy-chart.selectorLabels" . | nindent 6 }}
 {{- end }}

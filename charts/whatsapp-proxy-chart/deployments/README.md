@@ -316,8 +316,9 @@ The output should look like the following:
 
 ```
 NAME                                  TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)                                                                                                 AGE
-kubernetes                            ClusterIP      10.72.0.1     <none>        443/TCP                                                                                                 19h
-whatsapp-proxy-whatsapp-proxy-chart   LoadBalancer   10.72.2.240   <PUBLIC_ENDPOINT>     8080:32220/TCP,8443:32287/TCP,8222:30054/TCP,5222:32734/TCP,80:31717/TCP,443:32498/TCP,8199:30617/TCP   3s
+kubernetes                                    ClusterIP      10.72.0.1     <none>              443/TCP                                                                                           19h
+whatsapp-proxy-whatsapp-proxy-chart           LoadBalancer   10.72.2.240   <PUBLIC_ENDPOINT>   8080:32220/TCP,8443:32287/TCP,8222:30054/TCP,5222:32734/TCP,80:31717/TCP,443:32498/TCP   3s
+whatsapp-proxy-whatsapp-proxy-chart-metrics   ClusterIP      10.72.2.241   <none>              8199/TCP                                                                                          3s
 ```
 
 The public endpoint for your deployment will appear under EXTERNAL-IP.
