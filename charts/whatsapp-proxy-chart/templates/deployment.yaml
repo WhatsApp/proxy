@@ -39,51 +39,33 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            {{- if .Values.service.http_proxy_port }}
             - name: http-proxy
               containerPort: 8080
               protocol: TCP
-            {{- end}}
-            {{- if .Values.service.http_port }}
             - name: http
               containerPort: 80
               protocol: TCP
-            {{- end}}
-            {{- if .Values.service.https_proxy_port }}
             - name: https-proxy
               containerPort: 8443
               protocol: TCP
-            {{- end}}
-            {{- if .Values.service.https_port }}
             - name: https
               containerPort: 443
               protocol: TCP
-            {{- end}}
-            {{- if .Values.service.jabber_proxy_port }}
             - name: jabber-proxy
               containerPort: 8222
               protocol: TCP
-            {{- end}}
-            {{- if .Values.service.jabber_port }}
             - name: jabber
               containerPort: 5222
               protocol: TCP
-            {{- end}}
-            {{- if .Values.service.media_port }}
             - name: media
               containerPort: 587
               protocol: TCP
-            {{- end}}
-            {{- if .Values.service.media_proxy_port}}
             - name: media-proxy
               containerPort: 7777
               protocol: TCP
-            {{- end}}
-            {{- if .Values.service.stats_port }}
             - name: stats
               containerPort: 8199
               protocol: TCP
-            {{- end}}
           readinessProbe:
             exec:
               command:
