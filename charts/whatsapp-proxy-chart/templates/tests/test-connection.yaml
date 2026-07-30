@@ -17,5 +17,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "whatsapp-proxy-chart.fullname" . }}:{{ .Values.service.stats_port }}']
+      args: ['{{ include "whatsapp-proxy-chart.fullname" . }}-metrics:8199{{ .Values.haproxy.stats.metricsPath }}']
   restartPolicy: Never

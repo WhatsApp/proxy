@@ -55,12 +55,6 @@ spec:
       protocol: TCP
       name: https
     {{- end}}
-    {{- if .Values.service.stats_port }}
-    - port: {{ .Values.service.stats_port }}
-      targetPort: 8199
-      protocol: TCP
-      name: stats
-    {{- end}}
     {{- if .Values.service.media_port }}
     - port: {{ .Values.service.media_port }}
       targetPort: 587

@@ -58,7 +58,6 @@ service:
   # https_proxy_port: 8443
   # jabber_proxy_port: 8222
   # media_proxy_port: 7777
-  # stats_port: 8199
 
 ingress:
   enabled: false

@@ -1,0 +1,20 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+#
+# License found in the LICENSE file in the root directory
+# of this source tree.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "whatsapp-proxy-chart.fullname" . }}-metrics
+  labels:
+    {{- include "whatsapp-proxy-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+spec:
+  type: ClusterIP
+  ports:
+    - name: stats
+      port: 8199
+      targetPort: stats
+      protocol: TCP
+  selector:
+    {{- include "whatsapp-proxy-chart.selectorLabels" . | nindent 4 }}
